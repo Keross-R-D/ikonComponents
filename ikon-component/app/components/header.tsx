@@ -2,9 +2,10 @@
 import AppBreadcrumb from "./app-breadcrumb";
 
 import { ThemeSwitcher } from "./theme-switcher";
-import TopMenuUser from "./header-nav-user";
 import { Separator } from "../shadcn/ui/separator";
 import { SidebarTrigger } from "../shadcn/ui/sidebar";
+import { LayoutGrid, Play } from "lucide-react";
+import { IconButton, IconTextButton } from "./buttons";
 
 function Header() {
   return (
@@ -18,9 +19,17 @@ function Header() {
           />
           <AppBreadcrumb />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex gap-4">
           <ThemeSwitcher />
-          {/* <TopMenuUser /> */}
+          <IconTextButton
+            variant={"default"}
+          >
+            <Play />
+            App Store
+          </IconTextButton>
+          <IconButton>
+            <LayoutGrid />
+          </IconButton>
         </div>
       </div>
     </header>

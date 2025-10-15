@@ -43,7 +43,6 @@ export default function RootLayout({
                 <SidebarInset className="flex flex-col h-screen">
                   <Header />
                   <div className="flex flex-col gap-4 p-4 pt-0 grow overflow-hidden">
-                     <TitleProgress title="dsfg" value={80}/>
                     {children}
                   </div>
                   <Footer />

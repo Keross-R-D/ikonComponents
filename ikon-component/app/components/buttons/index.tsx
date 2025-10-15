@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button, buttonVariants } from '@/shadcn/ui/button'
+import { Button, buttonVariants } from '@/app/shadcn/ui/button'
 import { type VariantProps } from "class-variance-authority"
 import { Tooltip } from '../tooltip'
 

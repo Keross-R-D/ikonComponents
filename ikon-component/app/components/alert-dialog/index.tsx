@@ -7,7 +7,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from "@/app/shadcn/ui/alert-dialog";
+} from "../../shadcn/ui/alert-dialog";
 
 interface CustomAlertDialogProps {
     title: string;
@@ -38,7 +38,7 @@ const CustomAlertDialog: React.FC<CustomAlertDialogProps> = ({
                 <AlertDialogHeader>
                     <AlertDialogTitle className={fontSize}>{title}</AlertDialogTitle>
                     <AlertDialogDescription className={fontSize}>
-                        
+
                         {description}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
