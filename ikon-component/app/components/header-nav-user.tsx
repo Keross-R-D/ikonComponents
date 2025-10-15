@@ -1,0 +1,37 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/shadcn/ui/avatar";
+import { Button } from "@/shadcn/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/shadcn/ui/dropdown-menu";
+import { getProfileData } from "@/utils/actions/auth";
+import { getSrcFromBase64String } from "@/utils/actions/common/utils";
+import UserDropdownMenu from "./userDropdownMenu";
+
+export default async function TopMenuUser() {
+  const user = await getProfileData();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" className="rounded-full">
+          <Avatar className="rounded-full">
+            <AvatarImage
+              src={getSrcFromBase64String(user?.USER_THUMBNAIL)}
+              alt={user.USER_NAME}
+            />
+            <AvatarFallback className="rounded-lg">
+              {user?.USER_NAME?.match(/\b([A-Z])/g)?.join("")}
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+        sideOffset={4}
+      >
+        <UserDropdownMenu />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
