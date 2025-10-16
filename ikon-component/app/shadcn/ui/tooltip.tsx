@@ -33,7 +33,7 @@ function TooltipTrigger({
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger"
     className={cn(
-      "inline-flex w-[80px] items-center justify-center whitespace-nowrap rounded-md border border-input bg-white  py-2 text-sm font-medium text-black shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+      "inline-flex w-[80px] whitespace-nowrap rounded-md border-0 border-input  py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
     )}
     {...props} />
 }
