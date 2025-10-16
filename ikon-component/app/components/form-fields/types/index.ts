@@ -12,13 +12,13 @@ export interface FormFieldProps {
 
 export interface FormInputProps
   extends FormFieldProps,
-    InputHTMLAttributes<HTMLInputElement> {
+  InputHTMLAttributes<HTMLInputElement> {
   name: string;
 }
 
 export interface FormTextareaProps
   extends FormFieldProps,
-    TextareaHTMLAttributes<HTMLTextAreaElement> {
+  TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
 }
 

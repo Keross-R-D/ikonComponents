@@ -1,10 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/shadcn/ui/avatar";
-import { Button } from "@/shadcn/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../shadcn/ui/avatar";
+import { Button } from "../shadcn/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/shadcn/ui/dropdown-menu";
+} from "../shadcn/ui/dropdown-menu";
 import { getProfileData } from "@/utils/actions/auth";
 import { getSrcFromBase64String } from "@/utils/actions/common/utils";
 import UserDropdownMenu from "./userDropdownMenu";

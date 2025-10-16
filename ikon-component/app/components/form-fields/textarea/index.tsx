@@ -1,8 +1,8 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/shadcn/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../../shadcn/ui/form'
 
 import React from 'react'
 import { FormTextareaProps } from '../types'
-import { Textarea } from '@/shadcn/ui/textarea'
+import { Textarea } from '../../../shadcn/ui/textarea'
 
 
 

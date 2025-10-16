@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import type { TabArray, TabProps } from "./type";
-import { useIsMobile } from "@/shadcn/hooks/use-mobile";
-import { Tabs as TabsComp,TabsContent, TabsList, TabsTrigger } from "@/shadcn/ui/tabs";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shadcn/ui/dropdown-menu";
+import { useIsMobile } from "../../shadcn/hooks/use-mobile";
+import { Tabs as TabsComp, TabsContent, TabsList, TabsTrigger } from "../../shadcn/ui/tabs";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../shadcn/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { TextButton } from "../buttons";
 

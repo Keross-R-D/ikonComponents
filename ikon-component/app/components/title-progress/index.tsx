@@ -1,4 +1,4 @@
-import { Progress } from "@/app/shadcn/ui/progress";
+import { Progress } from "../../shadcn/ui/progress";
 import * as React from "react";
 
 interface Props {

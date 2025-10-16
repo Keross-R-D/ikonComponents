@@ -1,11 +1,11 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/shadcn/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../../shadcn/ui/form'
 import React from 'react'
 import { FormInputProps } from '../types'
 import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
-  } from "@/shadcn/ui/input-otp"
+} from "../../../shadcn/ui/input-otp"
 
 export default function FormOtpInput({ formControl, label, formDescription, extraFormComponent, name, ...inputProps }: FormInputProps) {
     return (
@@ -17,7 +17,7 @@ export default function FormOtpInput({ formControl, label, formDescription, extr
                     <FormItem>
                         {label && <FormLabel>{label}</FormLabel>}
                         <FormControl>
-                        <InputOTP maxLength={4} {...field} >
+                            <InputOTP maxLength={4} {...field} >
                                 <InputOTPGroup>
                                     <InputOTPSlot index={0} />
                                     <InputOTPSlot index={1} />

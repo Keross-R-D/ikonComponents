@@ -13,7 +13,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/app/shadcn/ui/breadcrumb";
+} from "../../shadcn/ui/breadcrumb";
 import {
   Drawer,
   DrawerClose,
@@ -23,14 +23,15 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/app/shadcn/ui/drawer";
-import { Button } from "@/app/shadcn/ui/button";
-import { 
+} from "../../shadcn/ui/drawer";
+import { Button } from "../../shadcn/ui/button";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger, } from "@/app/shadcn/ui/dropdown-menu";
-import { useIsMobile } from "@/app/shadcn/hooks/use-mobile";
+  DropdownMenuTrigger,
+} from "../../shadcn/ui/dropdown-menu";
+import { useIsMobile } from "../../shadcn/hooks/use-mobile";
 
 export default function AppBreadcrumb() {
   const { breadcrumbItems, backBreadcrumb } = useBreadcrumb();

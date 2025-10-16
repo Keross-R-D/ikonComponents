@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton } from "@/shadcn/ui/skeleton";
+import { Skeleton } from "../../shadcn/ui/skeleton";
 
 interface GradeTableLoaderProps {
   rowCount?: number;

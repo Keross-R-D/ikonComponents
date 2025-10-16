@@ -42,7 +42,7 @@
 //   const [search, setSearch] = useState("");
 //   const containerRef = useRef<HTMLDivElement>(null);
 
-  
+
 //   // Filter items based on search
 //   const filteredItems = items.filter((item) =>
 //       item.label?.toLowerCase().includes(search.toLowerCase())
@@ -73,7 +73,7 @@
 //               const calculateVisibleItems = useCallback(() => {
 //                   const container = containerRef.current;
 //                   if (!container) return visibleCount;
-                  
+
 //                   const children = Array.from(container.children) as HTMLElement[];
 
 //                   let availableWidth = container.offsetWidth;
@@ -104,7 +104,7 @@
 //                       animationFrameId = requestAnimationFrame(() => {
 //                           const newVisibleCount = calculateVisibleItems();
 //                           setVisibleCount((prevVisibleCount: number) => {
-                              
+
 //                               if (prevVisibleCount !== newVisibleCount) {
 //                                   return newVisibleCount;
 //                               }
@@ -287,11 +287,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shadcn/ui/form";
+} from "../../../shadcn/ui/form";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
-import { Button } from "@/shadcn/ui/button";
-import { cn } from "@/shadcn/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../shadcn/ui/popover";
+import { Button } from "../../../shadcn/ui/button";
+import { cn } from "../../../shadcn/lib/utils";
 import { ChevronsUpDown, X } from "lucide-react";
 import {
   Command,
@@ -300,10 +300,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shadcn/ui/command";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shadcn/ui/tooltip";
-import { FormComboboxInputProps as BaseFormComboboxInputProps } from "@/ikon/components/form-fields/types";
-import { Checkbox } from "@/shadcn/ui/checkbox";
+} from "../../../shadcn/ui/command";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../shadcn/ui/tooltip";
+import { FormComboboxInputProps as BaseFormComboboxInputProps } from "../../form-fields/types";
+import { Checkbox } from "../../../shadcn/ui/checkbox";
 
 interface FormComboboxInputProps extends BaseFormComboboxInputProps {
   defaultOptions?: number;

@@ -1,4 +1,4 @@
-import { TooltipProvider } from "@/app/shadcn/ui/tooltip";
+import { TooltipProvider } from "../../shadcn/ui/tooltip";
 import { Tooltip as TooltipComp, TooltipTrigger, TooltipContent } from "@/app/shadcn/ui/tooltip";
 
 export function Tooltip({ tooltipContent, children }: { tooltipContent: string | React.ReactNode, children: React.ReactNode }) {

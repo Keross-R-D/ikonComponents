@@ -7,10 +7,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shadcn/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn/ui/popover";
-import { Button } from "@/shadcn/ui/button";
-import { cn } from "@/shadcn/lib/utils";
+} from "../../../shadcn/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../shadcn/ui/popover";
+import { Button } from "../../../shadcn/ui/button";
+import { cn } from "../../../shadcn/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -19,7 +19,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shadcn/ui/command";
+} from "../../../shadcn/ui/command";
 
 // Updated type definition to include 'value' and 'onChange'
 export interface FormComboboxInputProps {
@@ -67,7 +67,7 @@ export default function FormComboboxInputWithValue(props: FormComboboxInputProps
                 >
                   {currentValue
                     ? props.items.find((item) => item.value === currentValue)
-                        ?.label || currentValue
+                      ?.label || currentValue
                     : props.placeholder}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>

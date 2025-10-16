@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/shadcn/ui/dropdown-menu";
+} from "../shadcn/ui/dropdown-menu";
 import MenuUser from "./menu-user";
 import { signOut } from "@/utils/actions/auth";
 
