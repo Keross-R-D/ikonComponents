@@ -34,6 +34,7 @@ export * from "./shadcn/tabs"
 export * from "./shadcn/textarea"
 export * from "./shadcn/tooltip"
 export * from "./shadcn/workflow"
+
 export * from "./shadcn/aspect-ratio"
 export * from "./shadcn/breadcrumb"
 export * from "./shadcn/collapsible"
@@ -83,6 +84,19 @@ export type { FrameworkEntry, TreeNode, ParentEntry, ProcessedFrameworkData } fr
 export { Widgets } from "./ikoncomponents/widgets"
 export type { WidgetProps, WidgetsFunctionProps } from "./ikoncomponents/widgets/type"
 
+export { BreadcrumbProvider, useBreadcrumb } from "./ikoncomponents/app-breadcrumb/BreadcrumbProvider";
+export type { BreadcrumbItemProps } from "./ikoncomponents/app-breadcrumb/BreadcrumbProvider";
+export { AppBreadcrumb, RenderAppBreadcrumb } from "./ikoncomponents/app-breadcrumb";
+export { FormComboboxInput } from "./ikoncomponents/form-fields/combobox-input"
+export { FormComboboxInputWithValue } from "./ikoncomponents/form-fields/combobox-input-value"
+export { FormDateInput } from "./ikoncomponents/form-fields/date-input"
+export { FormFileInput } from "./ikoncomponents/form-fields/file-input"
+export { FormInput } from "./ikoncomponents/form-fields/input"
+export { dFormMultiComboboxInput } from "./ikoncomponents/form-fields/multi-combobox-input"
+export { FormOtpInput } from "./ikoncomponents/form-fields/otp-input"
+export { FormPhoneInput } from "./ikoncomponents/form-fields/phone-input"
+export { FormTextarea } from "./ikoncomponents/form-fields/textarea"
+export type { FormFieldProps, FormInputProps, FormTextareaProps, FormDateInputProps, FormComboboxInputProps, FormComboboxItemProps } from "./ikoncomponents/form-fields/types"
 
 export { ThemeProvider } from "./utils/theme-provider"
 export { cn } from "./utils/cn"
