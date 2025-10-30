@@ -97,6 +97,8 @@ export { FormOtpInput } from "./ikoncomponents/form-fields/otp-input"
 export { FormPhoneInput } from "./ikoncomponents/form-fields/phone-input"
 export { FormTextarea } from "./ikoncomponents/form-fields/textarea"
 export type { FormFieldProps, FormInputProps, FormTextareaProps, FormDateInputProps, FormComboboxInputProps, FormComboboxItemProps } from "./ikoncomponents/form-fields/types"
+export type { ResourceTableProps } from "./ikoncomponents/resource"
+export { ResourceTable as ResourceTableComponent } from "./ikoncomponents/resource"
 
 export { ThemeProvider } from "./utils/theme-provider"
 export { cn } from "./utils/cn"
