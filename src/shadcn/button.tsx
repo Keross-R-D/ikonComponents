@@ -10,11 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[var(--calender-foreground)] text-[var(--btn-default)] shadow-xs hover:bg-[var(--calender-foreground)]/60 keross:hover:bg-[#1F3ABA99]",
+          "bg-[var(--accent)] text-[var(--accent-foreground)] shadow-xs hover:bg-[var(--accent)]/60",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-btn-outlined shadow-xs hover:bg-accent hover:text-foreground ",
+          "border! border-2! bg-background shadow-xs hover:bg-accent hover:text-accent-foreground ",
         secondary:
           "bg-[var(--btn-secondary)] text-secondary-foreground shadow-xs hover:bg-[var(--btn-secondary)]/20 border border-input",
         ghost:
@@ -30,6 +30,7 @@ const buttonVariants = cva(
         icon: "size-9",
         smIcon: "h-8 w-8",
         circular: "size-10 rounded-full p-0",
+        lgIcon: "size-10",
       },
     },
     defaultVariants: {
