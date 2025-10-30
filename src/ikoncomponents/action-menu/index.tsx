@@ -1,0 +1,108 @@
+"use client";
+import * as React from "react";
+import { Button } from "../../shadcn/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "../../shadcn/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import type { ActionMenuProps, ExtraActionParams } from "./type";
+import { IconButtonWithTooltip } from "../buttons";
+
+export function ActionMenu({
+  actionMenus,
+  extraActionParams,
+}: {
+  actionMenus: ActionMenuProps[];
+  extraActionParams?: ExtraActionParams;
+}) {
+  const renderMenuItems = (items: ActionMenuProps[]) => {
+    items = items.filter((item) => {
+      // biome-ignore lint/complexity/useOptionalChain: <explanation>
+      return (item?.visibility === undefined || item.visibility === true || (item.visibility && item.visibility(...(extraActionParams?.arguments || []))))
+    })
+    if (items.length === 0) {
+      return <DropdownMenuItem className="text-center">No action available.</DropdownMenuItem>
+    }
+    return items.map((item, index) => {
+      if (item.type === "label") {
+        return <DropdownMenuLabel key={index}>{String(item.label)}</DropdownMenuLabel>;
+      }
+
+      if (item.type === "separator") {
+        return <DropdownMenuSeparator key={index} />;
+      }
+
+      if (item.type === "group" && item.items) {
+        return (
+          <DropdownMenuGroup key={index}>
+            {renderMenuItems(item.items)}
+          </DropdownMenuGroup>
+        );
+      }
+
+      if (item.items) {
+        return (
+          <DropdownMenuSub key={index}>
+            <DropdownMenuSubTrigger>{String(item.label)}</DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                {renderMenuItems(item.items)}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        );
+      }
+
+      let labelContent = "";
+      if (typeof item.label === "function") {
+        labelContent = item.label(...(extraActionParams?.arguments || []));
+      } else {
+        labelContent = item.label;
+      }
+      return (
+
+        <DropdownMenuItem
+          key={index}
+          disabled={item.disabled}
+          onClick={() =>
+            // biome-ignore lint/complexity/useOptionalChain: <explanation>
+            item.onClick &&
+            item.onClick(...(extraActionParams?.arguments || []))
+          }
+        >
+          {item.icon && <item.icon />}
+          {labelContent}
+          {/* {item.shortcut && <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>} */}
+        </DropdownMenuItem>
+      );
+    });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <IconButtonWithTooltip
+          variant="ghost"
+          tooltipContent="Actions"
+          className="h-8 w-8 p-0 border-0 bg-transparent text-foreground keross:text-white elevation-0 shadow-none hover:bg-transparent"
+        >
+          <MoreHorizontal />
+        </IconButtonWithTooltip>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end">
+        {renderMenuItems(actionMenus)}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
