@@ -106,6 +106,8 @@ export { SkeletonWidget } from "./ikoncomponents/skeleton-loader/skeleton-widget
 export { UploadTab } from "./ikoncomponents/upload-tab"
 
 export { ThemeProvider } from "./utils/theme-provider"
+export { RadiusProvider, useRadius } from "./utils/border-radius-provider"
+export { FontProvider, useFont } from "./utils/font-provider"
 export { cn } from "./utils/cn"
 
 export { useIsMobile } from "./hooks/use-mobile"
