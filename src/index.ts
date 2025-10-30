@@ -103,6 +103,7 @@ export { ResourceTable as ResourceTableComponent } from "./ikoncomponents/resour
 export { GradeTableLoader } from "./ikoncomponents/skeleton-loader/skeleton-table"
 export type { GradeTableLoaderProps } from "./ikoncomponents/skeleton-loader/skeleton-table"
 export { SkeletonWidget } from "./ikoncomponents/skeleton-loader/skeleton-widget"
+export { UploadTab } from "./ikoncomponents/upload-tab"
 
 export { ThemeProvider } from "./utils/theme-provider"
 export { cn } from "./utils/cn"
