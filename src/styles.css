@@ -82,7 +82,7 @@
   --progress-foreground: oklch(9.414% 0.02562 23.372 / 0.753);
   --progress-background: var(--ring);
   --keross-skeleton-bg: oklch(44.967% 0.00521 16.812 / 0.589);
-  --hover-back: var(--muted-foreground);
+  --hover-back: var(--ring);
   --calender-foreground: oklch(12.382% 0.00233 17.142);
   --contrast-color: oklch(12.382% 0.00233 17.142);
   --btn-secondary: #00000007;
@@ -149,7 +149,7 @@
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.117 0.045 267.4);
+  --accent: #1F3ABA;
   --accent-foreground: oklch(0.985 0 0);
   --calender-foreground: #1F3ABA;
   --destructive: #F43F5E;
@@ -187,4 +187,23 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+  }
+
 }
