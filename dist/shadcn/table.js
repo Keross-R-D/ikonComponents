@@ -30,7 +30,7 @@ function TableFooter(_a) {
 }
 function TableRow(_a) {
     var { className } = _a, props = __rest(_a, ["className"]);
-    return (_jsx("tr", Object.assign({ "data-slot": "table-row", className: cn("hover:bg-[var(--hover-back)] data-[state=selected]:bg-muted border-b transition-colors", className) }, props)));
+    return (_jsx("tr", Object.assign({ "data-slot": "table-row", className: cn("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className) }, props)));
 }
 function TableHead(_a) {
     var { className } = _a, props = __rest(_a, ["className"]);

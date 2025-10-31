@@ -16,9 +16,9 @@ import { cn } from "../utils/cn";
 const buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive", {
     variants: {
         variant: {
-            default: "bg-[var(--calender-foreground)] text-[var(--btn-default)] shadow-xs hover:bg-[var(--calender-foreground)]/60 keross:hover:bg-[#1F3ABA99]",
+            default: "bg-[var(--accent)] text-[var(--accent-foreground)] shadow-xs hover:bg-[var(--accent)]/60",
             destructive: "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-            outline: "border bg-btn-outlined shadow-xs hover:bg-accent hover:text-foreground ",
+            outline: "border! border-2! bg-background shadow-xs hover:bg-accent hover:text-accent-foreground ",
             secondary: "bg-[var(--btn-secondary)] text-secondary-foreground shadow-xs hover:bg-[var(--btn-secondary)]/20 border border-input",
             ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
             dashed: "border border-dashed bg-background shadow-sm hover:bg-accent hover:text-accent-foreground ",
@@ -31,6 +31,7 @@ const buttonVariants = cva("inline-flex items-center justify-center gap-2 whites
             icon: "size-9",
             smIcon: "h-8 w-8",
             circular: "size-10 rounded-full p-0",
+            lgIcon: "size-10",
         },
     },
     defaultVariants: {
