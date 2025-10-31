@@ -94,6 +94,7 @@ export { MainSidebar } from "./ikoncomponents/main-layout/main-sidebar";
 export { NavMain } from "./ikoncomponents/main-layout/nav-main";
 export { SidebarNavProvider, useSidebarNav } from "./ikoncomponents/main-layout/SidebarNavContext";
 export { MainLayout } from "./ikoncomponents/main-layout";
+export { ProviderWrapper } from "./ikoncomponents/provider-wrapper";
 export { ThemeProvider } from "./utils/theme-provider";
 export { RadiusProvider, useRadius } from "./utils/border-radius-provider";
 export { FontProvider, useFont } from "./utils/font-provider";
