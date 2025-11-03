@@ -80,6 +80,8 @@ export { FrameworkItemDropdown } from "./ikoncomponents/twolevel-dropdown";
 export type { FrameworkEntry, TreeNode, ParentEntry, ProcessedFrameworkData } from "./ikoncomponents/twolevel-dropdown";
 export { Widgets } from "./ikoncomponents/widgets";
 export type { WidgetProps, WidgetsFunctionProps } from "./ikoncomponents/widgets/type";
+export { BigCalendar } from "./ikoncomponents/big-calendar";
+export type { BigCalendarProps, ExtraParamsEvent, BigCalendarEventProps, BigCalenderToolbarProps } from "./ikoncomponents/big-calendar/type";
 export { BreadcrumbProvider, useBreadcrumb } from "./ikoncomponents/app-breadcrumb/BreadcrumbProvider";
 export type { BreadcrumbItemProps } from "./ikoncomponents/app-breadcrumb/BreadcrumbProvider";
 export { AppBreadcrumb, RenderAppBreadcrumb } from "./ikoncomponents/app-breadcrumb";

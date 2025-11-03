@@ -22,7 +22,7 @@ const localizer = dateFnsLocalizer({
 });
 
 
-export default function BigCalendar({ events, extraParamsEvent, extraTools }: BigCalendarProps) {
+export function BigCalendar({ events, extraParamsEvent, extraTools }: BigCalendarProps) {
     const [view, setView] = useState(
         extraParamsEvent?.defaultView === "day" ? Views.DAY :
             extraParamsEvent?.defaultView === "week" ? Views.WEEK :

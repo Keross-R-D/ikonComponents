@@ -72,6 +72,7 @@ export { TitleProgress } from "./ikoncomponents/title-progress";
 export { TooltipComponent } from "./ikoncomponents/tooltip";
 export { FrameworkItemDropdown } from "./ikoncomponents/twolevel-dropdown";
 export { Widgets } from "./ikoncomponents/widgets";
+export { BigCalendar } from "./ikoncomponents/big-calendar";
 export { BreadcrumbProvider, useBreadcrumb } from "./ikoncomponents/app-breadcrumb/BreadcrumbProvider";
 export { AppBreadcrumb, RenderAppBreadcrumb } from "./ikoncomponents/app-breadcrumb";
 export { FormComboboxInput } from "./ikoncomponents/form-fields/combobox-input";
