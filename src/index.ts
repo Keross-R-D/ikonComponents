@@ -112,6 +112,8 @@ export type { SidebarNavSubItem, SidebarNavItem, SidebarNavContextType } from ".
 export { SidebarNavProvider, useSidebarNav } from "./ikoncomponents/main-layout/SidebarNavContext"
 export { MainLayout } from "./ikoncomponents/main-layout"
 export { ProviderWrapper } from "./ikoncomponents/provider-wrapper"
+export {ActivitySheet} from "./ikoncomponents/activity-sheet"
+export type {ActivityLogProps} from "./ikoncomponents/activity-sheet"
 
 export { ThemeProvider } from "./utils/theme-provider"
 export { RadiusProvider, useRadius } from "./utils/border-radius-provider"
