@@ -1,0 +1,106 @@
+"use server";
+import sha512 from "crypto-js/sha512";
+import ikonBaseApi from "../../api/ikonBaseApi";
+import {
+  ForgotPasswordProps,
+  GetLoggedInUserProfileDetailsReturnProps,
+  GetLoggedInUserProfileReturnProps,
+  LoginProps,
+  UpdateUserProfileProps,
+  ValidateOTPProps,
+} from "./type";
+import { revalidateTag } from "next/cache";
+
+export const login = async ({ userName, password }: LoginProps) => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "login",
+    arguments_: [userName, sha512(password).toString()],
+    isTicketRequried: false,
+  });
+  return result.data;
+};
+
+export const resetPassword = async ({ userName }: ForgotPasswordProps) => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "resetPassword",
+    arguments_: [userName],
+    isTicketRequried: false,
+  });
+  return result.data;
+};
+
+export const generateOTP = async ({
+  temporaryTicket,
+  otpMedium = "EMAIL",
+}: {
+  temporaryTicket: string;
+  otpMedium?: string;
+}) => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "generateOTP",
+    arguments_: [temporaryTicket, otpMedium],
+    isTicketRequried: false,
+  });
+  return result.data;
+};
+
+export const validateOTP = async ({
+  temporaryTicket,
+  otp,
+}: ValidateOTPProps) => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "validateOTP",
+    arguments_: [temporaryTicket, otp],
+    isTicketRequried: false,
+  });
+  return result.data;
+};
+
+export const logout = async () => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "logout",
+  });
+  return result.data;
+};
+export const getLoggedInUserProfile = async (
+  isServerApi?: boolean
+): Promise<GetLoggedInUserProfileReturnProps> => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "getLoggedInUserProfile",
+    isServerApi,
+  });
+  return result.data;
+};
+
+export const getLoggedInUserProfileDetails = async (
+  isServerApi?: boolean
+): Promise<GetLoggedInUserProfileDetailsReturnProps> => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "getLoggedInUserProfileDetails",
+    isServerApi,
+  });
+  return result.data;
+};
+
+export const updateUserProfile = async ({
+  userName,
+  userPassword,
+  userPhone,
+  userEmail,
+  userThumbnail,
+}: UpdateUserProfileProps) => {
+  const result = await ikonBaseApi({
+    service: "loginService",
+    operation: "updateUserProfile",
+    arguments_: [userName, userPassword, userPhone, userEmail, userThumbnail],
+  });
+  revalidateTag("profile");
+  return result.data;
+};
