@@ -27,16 +27,13 @@ export interface Account {
 export interface Software {
     softwareId: string;
     softwareName: string;
-    softwareVersion: string;
-    softwareDescription: string;
-    accountId: string;
-    purchaseDate: string;
-    softwareOwnerId: string;
-    expiresOn: string | null;
-    active: boolean;
-    requestStatus: string | null;
-    softwareVisibility: 'PUBLIC' | 'PRIVATE' | 'RESTRICTED';
+    url: string;
+    icon: string;
+    visible: boolean;
+    defaultSoftware: boolean;
+    order: number;
 }
+
 
 
 export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
@@ -82,7 +79,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
             try {
                 const accessToken = await getValidAccessToken()
-                const response = await axios.get(`${baseUrl}/platform/software-subscription/account`, {
+                const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -185,7 +182,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                         className="h-10 w-10"
                                         asChild
                                     >
-                                        <Link href="/">
+                                        <Link href={software.url}>
                                             <Icon className="h-5 w-5" />
                                             <span className="sr-only">{software.softwareName}</span>
                                         </Link>

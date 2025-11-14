@@ -2,7 +2,7 @@ import { Input } from '../../../shadcn/input'
 import { Label } from '../../../shadcn/label'
 import { ToggleGroup, ToggleGroupItem } from '../../../shadcn/toggle-group'
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, FileImage, ImageIcon, RotateCcw, RotateCw, Square, Upload, ZoomIn, ZoomOut } from 'lucide-react'
-import { memo, useEffect, useState } from 'react'
+import { ChangeEvent, memo, useEffect, useState } from 'react'
 import { ImageCropper } from '../image-cropper'
 import Image from 'next/image'
 import { AspectRatio } from '../../../shadcn/aspect-ratio'
@@ -117,13 +117,13 @@ function CropperFormComponent({ onNewFileUpload }: Props) {
                             accept="image/*"
                             fileNamePlaceholder="Enter image name"
                             fileName={originalImage?.name || ""}
-                            onChange={(e) => {
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
                                     handleFileChange(file);
                                 }
                             }}
-                            onFileNameChange={(e) => {
+                            onFileNameChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 setOriginalImage({ ...originalImage, name: e.target.value })
                             }}
                         />

@@ -12,15 +12,11 @@ export interface Account {
 export interface Software {
     softwareId: string;
     softwareName: string;
-    softwareVersion: string;
-    softwareDescription: string;
-    accountId: string;
-    purchaseDate: string;
-    softwareOwnerId: string;
-    expiresOn: string | null;
-    active: boolean;
-    requestStatus: string | null;
-    softwareVisibility: 'PUBLIC' | 'PRIVATE' | 'RESTRICTED';
+    url: string;
+    icon: string;
+    visible: boolean;
+    defaultSoftware: boolean;
+    order: number;
 }
 export declare const MainSidebar: ({ baseUrl }: {
     baseUrl: string;
