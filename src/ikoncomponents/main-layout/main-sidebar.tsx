@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from 'react';
-import { Check, Clock, FolderCode, Heart, Home, LogOut, Settings } from 'lucide-react';
+import { Check, CircleUserRound, Clock, FolderCode, Heart, Home, LogOut, Settings } from 'lucide-react';
 import { Button } from '../../shadcn/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../shadcn/tooltip';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../../shadcn/dropdown-menu';
@@ -11,6 +11,8 @@ import { clearAllCookieSession } from '../../utils/session/cookieSession'
 import axios from 'axios';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { jwtDecode } from "jwt-decode";
+
 
 export interface Account {
     accountId: string;
@@ -34,17 +36,46 @@ export interface Software {
     order: number;
 }
 
+export interface User {
+    userId: string;
+    userName: string;
+    userLogin: string;
+    userPhone: string;
+    userEmail: string;
+    userType: string;
+    active: boolean;
+    dateOfBirth: string;
+    userProfileImage: string;
+    userDescription: string;
+    userDesignation: string;
+    userDeleted: boolean;
+}
+
+export interface DecodedAccessToken {
+    iss: string;
+    jti: string;
+    aud: string;
+    sub: string;
+    typ: string;
+    sid: string;
+    platformAccess: {
+        roles: string[];
+    };
+    primaryAccountId: string;
+    activeAccountId: string;
+    userType: string;
+    scope: string;
+    iat: number;
+    exp: number;
+}
+
+
 
 
 export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
-    const user = {
-        name: "Username",
-        email: "User email",
-        role: "Role",
-        avatar: ""
-    }
 
+    const [user, setUser] = React.useState<User>();
     const [accounts, setAccounts] = React.useState<Account[]>([]);
     const [selectedAccount, setSelectedAccount] = React.useState<Account | undefined>();
     const [softwares, setSoftwares] = React.useState<Software[]>([])
@@ -60,6 +91,26 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
     };
 
     React.useEffect(() => {
+
+        const fetchUser = async () => {
+            try {
+                const accessToken = await getValidAccessToken()
+                const decoded = jwtDecode<DecodedAccessToken>(accessToken ?? '');
+
+                const response = await axios.get(`${baseUrl}/platform/user/${decoded.sub}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                setUser(response.data)
+
+            } catch (error) {
+                console.error(error)
+            }
+        };
+
+
         const fetchAccounts = async () => {
             try {
                 const accessToken = await getValidAccessToken()
@@ -94,6 +145,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
         fetchAccounts();
         fetchSubscribedSoftwares();
+        fetchUser();
     }, []);
 
 
@@ -182,10 +234,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                         className="h-10 w-10"
                                         asChild
                                     >
-                                        <Link href={software.url}>
+                                        <a href={software.url}>
                                             <Icon className="h-5 w-5" />
                                             <span className="sr-only">{software.softwareName}</span>
-                                        </Link>
+                                        </a>
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="right" sideOffset={5}>
@@ -205,10 +257,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <Link href="/last-visited">
+                            <a href="/last-visited">
                                 <Clock className="h-5 w-5" />
                                 <span className="sr-only">Last Visited</span>
-                            </Link>
+                            </a>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
@@ -225,10 +277,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <Link href="/favourites">
+                            <a href="/favourites">
                                 <Heart className="h-5 w-5" />
                                 <span className="sr-only">Favourites</span>
-                            </Link>
+                            </a>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
@@ -244,10 +296,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <Link href="/settings">
+                            <a href="/settings">
                                 <Settings className="h-5 w-5" />
                                 <span className="sr-only">Settings</span>
-                            </Link>
+                            </a>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
@@ -263,12 +315,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             size="icon"
                             className="h-10 w-10 rounded-full"
                         >
-                            <Avatar className="h-8 w-8">
-                                <AvatarImage src={user.avatar} alt={user.name} />
-                                <AvatarFallback className="text-sm font-semibold">
-                                    {user.name.split(' ').map(n => n[0]).join('')}
-                                </AvatarFallback>
-                            </Avatar>
+                            <CircleUserRound className="h-8 w-8" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -277,21 +324,16 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                         sideOffset={8}
                     >
                         <div className="flex items-start gap-3 p-4 bg-card">
-                            <Avatar className="h-10 w-10 mt-1">
-                                <AvatarImage src={user.avatar} alt={user.name} />
-                                <AvatarFallback className="">
-                                    {user.name.split(' ').map(n => n[0]).join('')}
-                                </AvatarFallback>
-                            </Avatar>
+                            <CircleUserRound className="h-8 w-8" />
                             <div className="flex flex-col gap-0.5 flex-1 min-w-0">
                                 <p className="text-sm font-bold text-foreground blue-dark:text-muted-foreground truncate">
-                                    {user.name}
+                                    {user?.userName}
                                 </p>
                                 <p className="text-xs text-muted-foreground truncate">
-                                    {user.email}
+                                    {user?.userEmail}
                                 </p>
                                 <p className="text-sm text-muted-foreground font-semibold">
-                                    {user.role}
+                                    {selectedAccount?.accountName}
                                 </p>
                             </div>
                         </div>
