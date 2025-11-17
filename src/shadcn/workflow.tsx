@@ -2,14 +2,8 @@
 
 import * as React from "react";
 import { Badge } from "./badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
 import { ChevronDown } from "lucide-react";
+import { Button } from "./button";
 
 export type StepStatus = "OUTSTANDING" | "IN PROGRESS" | "COMPLETED";
 
@@ -17,9 +11,10 @@ export type WorkflowStep = {
   id: string;
   title: string;
   status: StepStatus;
-  dropdownOptions?: { label: string; value: string }[];
+  dropdownOptions?: React.ReactNode[]; // user sends JSX buttons
   selectedOption?: string;
-  onDropdownSelect?: (stepId: string, value: string) => void;
+  owner?: string;
+  createdAt?: string;
 };
 
 type WorkflowProps = {
@@ -44,6 +39,8 @@ export function Workflow({
   const completedCount = steps.filter((s) => s.status === "COMPLETED").length;
   const progressPercent = (completedCount / steps.length) * 100;
 
+  const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
+
   return (
     <div
       style={style}
@@ -56,63 +53,85 @@ export function Workflow({
           key={step.id}
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border border-neutral-600 rounded-md gap-1 sm:gap-2 m-2"
         >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 w-full sm:w-auto">
-            {/* small circle */}
-            <div className="w-6 h-6 sm:w-6 sm:h-6 dark:bg-neutral-800 bg-[var(--keross-skeleton-bg)] rounded-sm flex-shrink-0" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
 
-            {/* title */}
-            <div className=" text-sm ">
-              {step.title}
+            {/* small icon box */}
+            <div className="w-7 h-7 sm:w-9 sm:h-9 dark:bg-neutral-800 bg-[var(--keross-skeleton-bg)] rounded-sm flex-shrink-0" />
+
+            {/* TITLE + DROPDOWN (NOW INLINE NEXT TO TITLE) */}
+            <div className="flex flex-col text-md">
+              {/* Title + dropdown icon inline */}
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">{step.title}</span>
+
+                {step.status === "IN PROGRESS" && step.dropdownOptions && (
+                  <div className="relative inline-block">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenDropdown((prev) =>
+                          prev === step.id ? null : step.id
+                        )
+                      }
+                      className="p-1"
+                    >
+                      <ChevronDown
+                        className={`w-4 h-4 cursor-pointer transition-transform duration-200 ${
+                          openDropdown === step.id ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {openDropdown === step.id && (
+                      <div className="absolute mt-2 w-40 dark:bg-neutral-800 bg-background shadow-lg dark:border-neutral-700 rounded-md z-20 p-1 space-y-1">
+                        {step.dropdownOptions.map((optionNode, index) => (
+                          <div
+                            key={index}
+                            onClick={() => setOpenDropdown(null)}
+                            className="w-full"
+                          >
+                            {optionNode}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Owner */}
+              {step.owner && (
+                <span className="text-sm text-neutral-400">{step.owner}</span>
+              )}
+
+              {/* CreatedAt */}
+              {step.createdAt && (
+                <span className="text-sm text-neutral-500">
+                  Created on {step.createdAt}
+                </span>
+              )}
             </div>
-
-            {/* show dropdown only if status === "IN PROGRESS" */}
-           {step.status === "IN PROGRESS" && step.dropdownOptions && (
-  <Select
-    defaultValue={step.selectedOption}
-    onValueChange={(value) => onDropdownSelect?.(step.id, value)}
-  >
-    <SelectTrigger
-      // hide built-in chevron + enable rotation via data-state
-      className=" border-transparent bg-transparent p-0 hover:bg-transparent  [&>svg:last-child]:hidden data-[state=open]:[&>svg:first-child]:rotate-180"
-    >
-      {/* custom chevron that rotates */}
-      <ChevronDown className="w-4 h-4  cursor-pointer transition-transform duration-200" />
-      <SelectValue placeholder="" />
-    </SelectTrigger>
-
-    <SelectContent>
-      {step.dropdownOptions.map((opt) => (
-        <SelectItem
-          key={opt.value}
-          value={opt.value}
-          className="text-xs hover:cursor-pointer dark:hover:bg-neutral-700"
-        >
-          {opt.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)}
-
-
           </div>
 
-          {/* badge */}
+          {/* Right status badge */}
           <div className="mt-1 sm:mt-0 flex-shrink-0">
-            <Badge className={statusColors[step.status]}>{step.status}</Badge>
+            <Badge className={statusColors[step.status]}>
+              {step.status}
+            </Badge>
           </div>
         </div>
       ))}
 
-      <div className="text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center pt-1 gap-1 sm:gap-0">
+      {/* Summary */}
+      <div className="text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center pt-1">
         <span>{steps.length} steps total</span>
         <span>{completedCount} completed</span>
       </div>
 
-      {/* progress bar */}
+      {/* Progress bar */}
       <div className="w-full bg-gray-300 dark:bg-gray-700 h-1 rounded-full overflow-hidden mt-1">
         <div
-          className="bg-blue-500 dark:bg-blue-400 h-1 transition-all"
+          className="h-1 bg-blue-500 dark:bg-blue-400 transition-all"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
