@@ -1,6 +1,6 @@
 {
   "name": "ikoncomponents",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "css": "dist/styles.css",
@@ -52,6 +52,7 @@
     "eslint": "^9",
     "framer-motion": "^12.23.22",
     "input-otp": "^1.4.2",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.552.0",
     "motion": "^12.23.22",
     "next": "16.0.0",

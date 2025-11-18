@@ -23,7 +23,8 @@
   },
   "include": [
     "src/index.ts",
-    "src/styles.css"
+    "src/styles.css",
+    "src/ikoncomponents/big-calender/index.css"
   ],
   "exclude": ["node_modules"]
 }

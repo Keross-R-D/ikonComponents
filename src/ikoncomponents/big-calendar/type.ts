@@ -19,7 +19,7 @@ export interface ExtraParamsEvent {
 }
 
 export interface BigCalendarEventProps extends Event {
-  title?: string;
+  title?: string
   isEditable?: boolean;
   isViewable?: boolean;
   start: Date;
