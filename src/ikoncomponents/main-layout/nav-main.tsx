@@ -22,9 +22,9 @@ import { SidebarNavItem, useSidebarNav } from "./SidebarNavContext";
 export function NavMain() {
   const { navItems } = useSidebarNav();
 
-  if (!navItems || navItems.length === 0) {
-    return null;
-  }
+  // if (!navItems || navItems.length === 0) {
+  //   return null;
+  // }
 
   return (
     <SidebarGroup>
