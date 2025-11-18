@@ -3,21 +3,14 @@ import { format, getDay, parse, startOfWeek } from "date-fns";
 import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState } from "react";
-// import "./index.css";
 import { BigCalendarProps } from "./type";
 import BigCalenderToolbar from "./big-calender-toolbar";
 import BigCalenderEvent from "./big-calender-event";
-import { enUS } from 'date-fns/locale';
 
 // Localization settings
 const locales = {
-    "en-US": enUS,
+    "en-US": require("date-fns/locale/en-US"),
 };
-
-// 
-// const locales = {
-//     "en-US": require("date-fns/locale/en-US"),
-// };
 
 const localizer = dateFnsLocalizer({
     format,
@@ -62,3 +55,4 @@ export function BigCalendar({ events, extraParamsEvent, extraTools }: BigCalenda
     );
 }
 
+  
