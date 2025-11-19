@@ -5,8 +5,8 @@ import * as React from "react"
 import { ThemeToggleBtn } from "../theme-toggle-btn";
 import { Separator } from "../../shadcn/separator";
 import { SidebarTrigger } from "../../shadcn/sidebar";
-import { LayoutGrid, Play } from "lucide-react";
-import { IconButton, IconTextButton } from "../buttons";
+import { Bell, LayoutGrid, Play } from "lucide-react";
+import { IconButton, IconButtonWithTooltip, IconTextButton } from "../buttons";
 import { useSidebarNav } from "./SidebarNavContext";
 
 export function Header() {
@@ -30,6 +30,9 @@ export function Header() {
           <AppBreadcrumb />
         </div>
         <div className="ml-auto flex gap-4">
+          <IconButtonWithTooltip tooltipContent={"Notifications"} >
+            <Bell />
+          </IconButtonWithTooltip>
           <ThemeToggleBtn />
           <IconTextButton
             variant={"default"}

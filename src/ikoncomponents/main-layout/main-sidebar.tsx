@@ -210,7 +210,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                 className="h-10 w-10"
                                 asChild
                             >
-                                <Link href="/">
+                                <Link href="/home">
                                     <Home className="h-5 w-5" />
                                     <span className="sr-only">Home</span>
                                 </Link>
@@ -257,7 +257,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <a href="/last-visited">
+                            <a href="/ikon-portal/last-visited">
                                 <Clock className="h-5 w-5" />
                                 <span className="sr-only">Last Visited</span>
                             </a>
@@ -277,7 +277,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <a href="/favourites">
+                            <a href="/ikon-portal/favourites">
                                 <Heart className="h-5 w-5" />
                                 <span className="sr-only">Favourites</span>
                             </a>
@@ -296,7 +296,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <a href="/settings">
+                            <a href="/ikon-portal/settings">
                                 <Settings className="h-5 w-5" />
                                 <span className="sr-only">Settings</span>
                             </a>
