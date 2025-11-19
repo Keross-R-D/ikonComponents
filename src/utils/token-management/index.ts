@@ -1,15 +1,20 @@
 "use server";
 import { redirect } from "next/navigation";
-import { clearAllCookieSession, getCookieSession, setCookieSession } from "../session/cookieSession";
+import {
+  clearAllCookieSession,
+  getCookieSession,
+  setCookieSession,
+} from "../session/cookieSession";
 import { TokenResponse } from "./types";
-
 
 export interface AccessTokenOptionsProps {
   isNotLogOutWhenExpire?: boolean;
   isSetToken?: boolean;
 }
 
-export async function getValidAccessToken(options?: AccessTokenOptionsProps): Promise<string | null> {
+export async function getValidAccessToken(
+  options?: AccessTokenOptionsProps
+): Promise<string | null> {
   const accessToken = await getCookieSession("accessToken");
   const refreshToken = await getCookieSession("refreshToken");
 
@@ -19,7 +24,10 @@ export async function getValidAccessToken(options?: AccessTokenOptionsProps): Pr
 
   if (refreshToken) {
     // Refresh token is valid, call the refresh token API
-    const newAccessToken = await refreshAccessToken(refreshToken, options?.isSetToken);
+    const newAccessToken = await refreshAccessToken(
+      refreshToken,
+      options?.isSetToken
+    );
     if (newAccessToken) {
       return newAccessToken; // Return the new access token
     }
@@ -51,13 +59,22 @@ export async function refreshAccessToken(
     if (response.ok) {
       const data = await response.json();
 
-      const { accessToken, refreshToken, expiresIn, refreshExpiresIn }: TokenResponse = data;
+      const {
+        accessToken,
+        refreshToken,
+        expiresIn,
+        refreshExpiresIn,
+      }: TokenResponse = data;
       if (isSetToken) {
         try {
-          await setCookieSession("accessToken", accessToken, { maxAge: expiresIn });
-          await setCookieSession("refreshToken", refreshToken, { maxAge: refreshExpiresIn });
+          await setCookieSession("accessToken", accessToken, {
+            maxAge: expiresIn,
+          });
+          await setCookieSession("refreshToken", refreshToken, {
+            maxAge: refreshExpiresIn,
+          });
         } catch (error) {
-          console.error(error)
+          console.error(error);
         }
       }
 
@@ -95,5 +112,5 @@ export async function refreshAccessToken(
 
 export async function logOut() {
   await clearAllCookieSession();
-  redirect(process.env.IKON_LOGIN_PAGE_URL || process.env.DEV_TOOL_BASE_PATH + "/signup.html")
+  redirect("/login.html");
 }
