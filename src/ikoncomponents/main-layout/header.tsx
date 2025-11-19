@@ -30,9 +30,9 @@ export function Header() {
           <AppBreadcrumb />
         </div>
         <div className="ml-auto flex gap-4">
-          <IconButtonWithTooltip tooltipContent={"Notifications"} >
+          <IconButton>
             <Bell />
-          </IconButtonWithTooltip>
+          </IconButton>
           <ThemeToggleBtn />
           <IconTextButton
             variant={"default"}
