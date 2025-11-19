@@ -1,13 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Badge } from "ikoncomponents";
 import { ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from "ikoncomponents";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "./dropdown-menu";
+import { Badge } from "./badge";
 
 export type StepStatus = "OUTSTANDING" | "IN PROGRESS" | "COMPLETED";
 

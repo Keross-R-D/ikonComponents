@@ -309,7 +309,7 @@ interface FormComboboxInputProps extends BaseFormComboboxInputProps {
   defaultOptions?: number;
 }
 
-export function dFormMultiComboboxInput({
+export function FormMultiComboboxInput({
   formControl,
   name,
   label,

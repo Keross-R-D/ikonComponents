@@ -4,7 +4,6 @@ import { format, getDay, parse, startOfWeek } from "date-fns";
 import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState } from "react";
-import "./index.css";
 import BigCalenderToolbar from "./big-calender-toolbar";
 import BigCalenderEvent from "./big-calender-event";
 // Localization settings
