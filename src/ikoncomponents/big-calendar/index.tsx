@@ -6,10 +6,11 @@ import { useState } from "react";
 import { BigCalendarProps } from "./type";
 import BigCalenderToolbar from "./big-calender-toolbar";
 import BigCalenderEvent from "./big-calender-event";
+import { enUS } from 'date-fns/locale';
 
 // Localization settings
 const locales = {
-    "en-US": require("date-fns/locale/en-US"),
+    "en-US": enUS,
 };
 
 const localizer = dateFnsLocalizer({
