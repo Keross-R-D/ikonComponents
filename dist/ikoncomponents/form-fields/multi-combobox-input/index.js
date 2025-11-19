@@ -262,7 +262,7 @@ import { ChevronsUpDown, X } from "lucide-react";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from "../../../shadcn/command";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../shadcn/tooltip";
 import { Checkbox } from "../../../shadcn/checkbox";
-export function dFormMultiComboboxInput({ formControl, name, label, placeholder, formDescription, items = [], disabled, onSelect, defaultValue = [], defaultOptions = 2, }) {
+export function FormMultiComboboxInput({ formControl, name, label, placeholder, formDescription, items = [], disabled, onSelect, defaultValue = [], defaultOptions = 2, }) {
     const [search, setSearch] = useState("");
     const containerRef = useRef(null);
     // Removed triggerRef and popoverWidth state, as we'll rely on CSS variables for sizing

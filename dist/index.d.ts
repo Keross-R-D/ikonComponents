@@ -90,7 +90,7 @@ export { FormComboboxInputWithValue } from "./ikoncomponents/form-fields/combobo
 export { FormDateInput } from "./ikoncomponents/form-fields/date-input";
 export { FormFileInput } from "./ikoncomponents/form-fields/file-input";
 export { FormInput } from "./ikoncomponents/form-fields/input";
-export { dFormMultiComboboxInput } from "./ikoncomponents/form-fields/multi-combobox-input";
+export { FormMultiComboboxInput } from "./ikoncomponents/form-fields/multi-combobox-input";
 export { FormOtpInput } from "./ikoncomponents/form-fields/otp-input";
 export { FormPhoneInput } from "./ikoncomponents/form-fields/phone-input";
 export { FormTextarea } from "./ikoncomponents/form-fields/textarea";
