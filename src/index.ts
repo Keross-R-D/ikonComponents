@@ -54,6 +54,8 @@ export type { ComboBoxInputProps, ComboboxItemProps } from "./ikoncomponents/com
 export { DataTableColumnFilter } from "./ikoncomponents/data-table/datatable-column-filter"
 export { DataTableFacetedFilter } from "./ikoncomponents/data-table/datatable-faceted-filter"
 export { DataTableFilterMenu } from "./ikoncomponents/data-table/datatable-filter-menu"
+export {convertFileToObject, FileUploader, getImageFromObject} from "./ikoncomponents/fileUpload"
+export type { FileUploaderProps } from "./ikoncomponents/fileUpload"
 export { DataTablePagination } from "./ikoncomponents/data-table/datatable-pagination"
 export { DataTableToolbar } from "./ikoncomponents/data-table/datatable-toolbar"
 export { getDataTableColumnTitle } from "./ikoncomponents/data-table/function"

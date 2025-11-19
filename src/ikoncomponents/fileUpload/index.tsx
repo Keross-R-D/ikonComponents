@@ -3,7 +3,7 @@
 import React, { useState, DragEvent } from "react";
 import { UploadCloud, FileUp } from "lucide-react";
 
-interface FileUploaderProps {
+export interface FileUploaderProps {
   label?: string;
   isDrag?: boolean; // enable or disable drag & drop
   onFileSelect: (fileObj: any) => Promise<any> | void; // now returns object with base64
@@ -24,7 +24,7 @@ export const convertFileToObject = async (file: File) => {
   };
 };
 
-export default function FileUploader({
+export function FileUploader({
   label = "Upload File",
   isDrag = false,
   onFileSelect,
