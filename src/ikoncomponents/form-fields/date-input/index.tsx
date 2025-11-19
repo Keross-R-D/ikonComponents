@@ -35,7 +35,6 @@ export function FormDateInput({
             {label && (
               <>
                 <FormLabel>{label}</FormLabel>
-                <br />
               </>
             )}
             <Popover>
@@ -64,7 +63,7 @@ export function FormDateInput({
                   // disabled={(date) =>
                   //   date > new Date() || date < new Date("1900-01-01")
                   // }
-                  initialFocus
+                  autoFocus
                 />
               </PopoverContent>
             </Popover>
