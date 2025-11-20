@@ -208,6 +208,7 @@ export { NewCropperImg } from "./ikoncomponents/image-cropper-upload/components/
 export type { CropperImgProps as NewCropperImgProps } from "./ikoncomponents/image-cropper-upload/components/newCropper";
 export { NewImageForm } from "./ikoncomponents/image-cropper-upload/components/newImageUploadForm";
 export type { ImageFormProps } from "./ikoncomponents/image-cropper-upload/components/newImageUploadForm";
+export { WorkInProgress } from "./ikoncomponents/work-in-progress";
 
 export { ThemeProvider } from "./utils/theme-provider";
 export { RadiusProvider, useRadius } from "./utils/border-radius-provider";
