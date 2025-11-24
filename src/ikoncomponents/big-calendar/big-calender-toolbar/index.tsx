@@ -56,14 +56,14 @@ export default function BigCalenderToolbar({ onNavigate, onView, label, extraToo
                                 break;
                         }
                     }}>
-                        <ToggleGroupItem className="rounded-e-none" value="DAY">
-                            Day
+                        <ToggleGroupItem className='rounded-e-none' value="MONTH">
+                            Month
                         </ToggleGroupItem>
                         <ToggleGroupItem className='rounded-none border-x-0' value="WEEK">
                             Week
                         </ToggleGroupItem>
-                        <ToggleGroupItem className='rounded-s-none' value="MONTH">
-                            Month
+                        <ToggleGroupItem className="rounded-s-none" value="DAY">
+                            Day
                         </ToggleGroupItem>
                     </ToggleGroup>
 
