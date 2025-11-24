@@ -8,6 +8,7 @@ import { SidebarTrigger } from "../../shadcn/sidebar";
 import { Bell, LayoutGrid, Play } from "lucide-react";
 import { IconButton, IconButtonWithTooltip, IconTextButton } from "../buttons";
 import { useSidebarNav } from "./SidebarNavContext";
+import Link from "next/link";
 
 export function Header() {
 
@@ -30,19 +31,21 @@ export function Header() {
           <AppBreadcrumb />
         </div>
         <div className="ml-auto flex gap-4">
-          <IconButton>
+          <IconButtonWithTooltip className="px-2!" tooltipContent={"Notifications"}>
             <Bell />
-          </IconButton>
+          </IconButtonWithTooltip>
           <ThemeToggleBtn />
-          <IconTextButton
-            variant={"default"}
-          >
-            <Play />
-            App Store
-          </IconTextButton>
-          <IconButton>
+          <Link href={"/app-store"}>
+            <IconTextButton
+              variant={"default"}
+            >
+              <Play />
+              App Store
+            </IconTextButton>
+          </Link>
+          {/* <IconButton>
             <LayoutGrid />
-          </IconButton>
+          </IconButton> */}
         </div>
       </div>
     </header>

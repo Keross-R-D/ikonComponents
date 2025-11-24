@@ -12,6 +12,7 @@ import axios from 'axios';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { jwtDecode } from "jwt-decode";
+import { Icon } from '../icon';
 
 
 export interface Account {
@@ -29,11 +30,23 @@ export interface Account {
 export interface Software {
     softwareId: string;
     softwareName: string;
-    url: string;
-    icon: string;
-    visible: boolean;
-    defaultSoftware: boolean;
-    order: number;
+    displayName: string;
+    softwareDescription: string;
+    softwareVersion: string;
+    softwareOwner: string;
+    softwareDeveloper: string;
+    softwareManager: string;
+    softwareVisibility: "PUBLIC" | "PRIVATE";
+    softwareStatus: string;
+    repoName: string;
+    active: boolean;
+    price: number;
+    currency: string | null;
+    logoResourceId: string | null;
+    icon: string | null;
+    link: string | null;
+    category: string | null;
+    videoResources: any[];
 }
 
 export interface User {
@@ -90,6 +103,13 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
             .slice(0, 2);
     };
 
+    function toPascalCase(icon: string) {
+        return icon
+            .split("-")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join("");
+    }
+
     React.useEffect(() => {
 
         const fetchUser = async () => {
@@ -130,7 +150,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
             try {
                 const accessToken = await getValidAccessToken()
-                const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
+                const response = await axios.get(`${baseUrl}/platform/software/accessible/account`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -200,10 +220,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                 </DropdownMenu>
 
                 {/* Softwares */}
-                <nav className="flex flex-col gap-2">
+                <nav className="flex flex-col gap-1">
 
                     <Tooltip key={"home"}>
-                        <TooltipTrigger asChild className='h-5 w-5'>
+                        <TooltipTrigger asChild className='h-8 w-8'>
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -211,7 +231,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                 asChild
                             >
                                 <Link href="/home">
-                                    <Home className="h-5 w-5" />
+                                    <Home className="h-8 w-8" />
                                     <span className="sr-only">Home</span>
                                 </Link>
                             </Button>
@@ -222,45 +242,56 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                     </Tooltip>
 
                 </nav>
-                <nav className="flex flex-col gap-2 flex-1">
+                <nav className="flex flex-col gap-1 flex-1">
                     {softwares.map((software) => {
-                        const Icon = FolderCode;
+                        const hasIcon = Boolean(software.icon && software.icon.trim() !== "")
+
                         return (
                             <Tooltip key={software.softwareName}>
-                                <TooltipTrigger asChild className='h-5 w-5'>
+                                <TooltipTrigger asChild className="h-8 w-8">
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         className="h-10 w-10"
                                         asChild
                                     >
-                                        <a href={software.url}>
-                                            <Icon className="h-5 w-5" />
+                                        <Link href={software.link ?? "#"}>
+
+                                            {hasIcon ? (
+                                                <Icon
+                                                    name={toPascalCase(software.icon ?? '')}
+                                                    className="h-8 w-8"
+                                                />
+                                            ) : (
+                                                <FolderCode className="h-8 w-8" />
+                                            )}
+
                                             <span className="sr-only">{software.softwareName}</span>
-                                        </a>
+                                        </Link>
                                     </Button>
                                 </TooltipTrigger>
+
                                 <TooltipContent side="right" sideOffset={5}>
                                     {software.softwareName}
                                 </TooltipContent>
                             </Tooltip>
-                        );
+                        )
                     })}
                 </nav>
 
                 {/* Last Visited */}
                 <Tooltip key="last-visited">
-                    <TooltipTrigger asChild className='h-5 w-5' >
+                    <TooltipTrigger asChild className='h-8 w-8' >
                         <Button
                             variant="ghost"
                             size="icon"
                             className="h-10 w-10"
                             asChild
                         >
-                            <a href="/ikon-portal/last-visited">
-                                <Clock className="h-5 w-5" />
+                            <Link href="/last-visited">
+                                <Clock className="h-8 w-8" />
                                 <span className="sr-only">Last Visited</span>
-                            </a>
+                            </Link>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
@@ -270,17 +301,17 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
                 {/* Favourites */}
                 <Tooltip key="favourites">
-                    <TooltipTrigger asChild className='h-5 w-5' >
+                    <TooltipTrigger asChild className='h-8 w-8' >
                         <Button
                             variant="ghost"
                             size="icon"
                             className="h-10 w-10"
                             asChild
                         >
-                            <a href="/ikon-portal/favourites">
-                                <Heart className="h-5 w-5" />
+                            <Link href="/favourites">
+                                <Heart className="h-8 w-8" />
                                 <span className="sr-only">Favourites</span>
-                            </a>
+                            </Link>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
@@ -290,16 +321,16 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
                 {/* Settings */}
                 <Tooltip key="settings">
-                    <TooltipTrigger asChild className='h-5 w-5' >
+                    <TooltipTrigger asChild className='h-8 w-8' >
                         <Button
                             variant="ghost"
                             className="h-10 w-10"
                             asChild
                         >
-                            <a href="/ikon-portal/settings">
-                                <Settings className="h-5 w-5" />
+                            <Link href="/settings">
+                                <Settings className="h-8 w-8" />
                                 <span className="sr-only">Settings</span>
-                            </a>
+                            </Link>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={5}>
@@ -313,7 +344,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-10 w-10 rounded-full"
+                            className="h-10 w-10"
                         >
                             <CircleUserRound className="h-8 w-8" />
                         </Button>
