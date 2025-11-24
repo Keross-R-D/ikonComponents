@@ -28,10 +28,10 @@ export default function BigCalenderToolbar({ onNavigate, onView, label, extraToo
                     <ToggleGroupItem className="rounded-e-none" value="PREV">
                         <ChevronLeft size={16} />
                     </ToggleGroupItem>
-                    <ToggleGroupItem className='rounded-none border-x-0' value="NEXT">
+                    <ToggleGroupItem className="rounded-none border-x" value="NEXT">
                         <ChevronRight size={16} />
                     </ToggleGroupItem>
-                    <ToggleGroupItem className='rounded-s-none' value="TODAY">
+                    <ToggleGroupItem className="rounded-s-none" value="TODAY">
                         Today
                     </ToggleGroupItem>
                 </ToggleGroup>
