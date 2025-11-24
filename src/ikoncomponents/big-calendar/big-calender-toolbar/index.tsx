@@ -40,14 +40,6 @@ export default function BigCalenderToolbar({ onNavigate, onView, label, extraToo
                 </span>
                 <div className="flex flex-row gap-2">
 
-                    {
-                        extraTools?.map((tool, index: number) =>
-                            <Fragment key={index}>
-                                {tool}
-                            </Fragment>
-                        )
-                    }
-
                     <ToggleGroup type="single" variant='outline' value={calViewsValue} onValueChange={(value: string) => {
                         setValue(value);
                         switch (value) {
@@ -74,6 +66,14 @@ export default function BigCalenderToolbar({ onNavigate, onView, label, extraToo
                             Month
                         </ToggleGroupItem>
                     </ToggleGroup>
+
+                    {
+                        extraTools?.map((tool, index: number) =>
+                            <Fragment key={index}>
+                                {tool}
+                            </Fragment>
+                        )
+                    }
                 </div>
             </div>
         </>
