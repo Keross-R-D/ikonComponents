@@ -6,111 +6,107 @@ import {
   setCookieSession,
 } from "../session/cookieSession";
 import { TokenResponse } from "./types";
+import { jwtDecode } from "jwt-decode";
 
-export interface AccessTokenOptionsProps {
+interface AccessTokenOptionsProps {
   isNotLogOutWhenExpire?: boolean;
   isSetToken?: boolean;
 }
+
+// Prevent multiple refresh calls at once
+let refreshPromise: Promise<string | null> | null = null;
 
 export async function getValidAccessToken(
   options?: AccessTokenOptionsProps
 ): Promise<string | null> {
   const accessToken = await getCookieSession("accessToken");
+
+  console.log("Access Token....:");
   const refreshToken = await getCookieSession("refreshToken");
 
-  if (accessToken) {
-    return accessToken;
-  }
+  console.log("Refresh Token...");
+
+  console.log(
+    "Before Return Access Token:..............................................."
+  );
+  if (accessToken) return accessToken;
+
+  console.log(
+    "After Return Access Token:..............................................."
+  );
 
   if (refreshToken) {
-    // Refresh token is valid, call the refresh token API
-    const newAccessToken = await refreshAccessToken(
-      refreshToken,
-      options?.isSetToken
-    );
-    if (newAccessToken) {
-      return newAccessToken; // Return the new access token
+    console.log("Refreshing access token using refresh token...", refreshToken);
+    if (!refreshPromise) {
+      refreshPromise = refreshAccessToken(refreshToken, true);
+      refreshPromise.finally(() => (refreshPromise = null));
     }
+    return await refreshPromise;
   }
+
   if (!options?.isNotLogOutWhenExpire) {
     await logOut();
   }
-  // If both tokens are invalid, return null
+
   return null;
 }
 
-export async function refreshAccessToken(
+async function refreshAccessToken(
   refreshToken: string,
   isSetToken?: boolean
 ): Promise<string | null> {
   try {
-    // Replace this with your actual API call to refresh the token
+    console.log("Refreshing access token...");
+
     const response = await fetch(
-      `${process.env.IKON_API_URL}/platform/auth/refresh-token`,
+      `https://ikoncloud-dev.keross.com/ikon-api/platform/auth/refresh-token`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken }),
       }
     );
 
-    if (response.ok) {
-      const data = await response.json();
+    console.log("Refresh Token API Response:", response.status);
 
-      const {
-        accessToken,
-        refreshToken,
-        expiresIn,
-        refreshExpiresIn,
-      }: TokenResponse = data;
-      if (isSetToken) {
-        try {
-          await setCookieSession("accessToken", accessToken, {
-            maxAge: expiresIn,
-          });
-          await setCookieSession("refreshToken", refreshToken, {
-            maxAge: refreshExpiresIn,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
+    if (!response.ok) return null;
 
-      // const headerList = headers();
-      // const protocol = (await headerList).get("x-forwarded-proto") || "http";
-      // const hostname = (await headerList).get("host") || "localhost:3000";
-      // const host = `${protocol}://${hostname}`;
-      // // Save the new access token and its expiration time
-      // try {
-      //   const res = await fetch(`${host}/api/auth/set-token`, {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(tokenData),
-      //     credentials: "include", // Include credentials to send cookies
-      //   });
-      //   if (res.ok) {
-      //     console.log("Token updated successfully");
-      //   } else {
-      //     console.error("Failed to update token");
-      //   }
-      // } catch (error) {
-      //   console.error("Error updating token:", error);
-      // }
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      expiresIn,
+      refreshExpiresIn,
+    }: TokenResponse = await response.json();
 
-      return accessToken;
+    //  Always set new access token
+    await setCookieSession("accessToken", accessToken, {
+      maxAge: expiresIn,
+    });
+
+    //  IMPORTANT: Save the rotated refresh token
+    if (newRefreshToken) {
+      await setCookieSession("refreshToken", newRefreshToken, {
+        maxAge: refreshExpiresIn,
+      });
+      console.log("Refresh token rotated & updated.");
     }
+
+    console.log(" Access token refreshed successfully.");
+    return accessToken;
   } catch (error) {
     console.error("Failed to refresh access token:", error);
+    return null;
   }
+}
 
-  return null;
+export async function decodeAccessToken() {
+  const accessToken = await getValidAccessToken();
+  return accessToken ? jwtDecode(accessToken) : null;
 }
 
 export async function logOut() {
   await clearAllCookieSession();
+  console.log("Logging out...");
   redirect("/login.html");
 }

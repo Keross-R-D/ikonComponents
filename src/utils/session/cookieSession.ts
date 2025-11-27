@@ -3,25 +3,26 @@ import { cookies } from "next/headers";
 
 const cookiePrefix = "ikoncloud_next_";
 
-export interface CookieSessionOptionsProps {
-  maxAge?: number,
-  expires?: Date
+interface CookieSessionOptionsProps {
+  maxAge?: number;
+  expires?: Date;
 }
 
 export async function setCookieSession(
   sessionName: string,
-  data: string, options?: CookieSessionOptionsProps
+  data: string,
+  options?: CookieSessionOptionsProps
 ) {
   const cookieStore = await cookies();
 
   cookieStore.set(cookiePrefix + sessionName, data, {
-    httpOnly: false,
+    httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
     domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
     expires: options?.expires,
-    maxAge: options?.maxAge
+    maxAge: options?.maxAge,
   });
 }
 
