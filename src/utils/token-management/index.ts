@@ -51,7 +51,7 @@ export async function getValidAccessToken(
   return null;
 }
 
-async function refreshAccessToken(
+export async function refreshAccessToken(
   refreshToken: string,
   isSetToken?: boolean
 ): Promise<string | null> {

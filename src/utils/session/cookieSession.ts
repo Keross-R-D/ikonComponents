@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 const cookiePrefix = "ikoncloud_next_";
 
-interface CookieSessionOptionsProps {
+export interface CookieSessionOptionsProps {
   maxAge?: number;
   expires?: Date;
 }

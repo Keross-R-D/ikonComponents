@@ -224,9 +224,9 @@ export {
 export {
   getValidAccessToken,
   refreshAccessToken,
+  decodeAccessToken,
   logOut,
 } from "./utils/token-management";
-export type { AccessTokenOptionsProps } from "./utils/token-management";
 export type { TokenResponse } from "./utils/token-management/types";
 
 export { useIsMobile } from "./hooks/use-mobile";
