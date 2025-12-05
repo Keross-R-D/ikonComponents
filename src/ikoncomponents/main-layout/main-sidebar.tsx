@@ -30,23 +30,11 @@ export interface Account {
 export interface Software {
     softwareId: string;
     softwareName: string;
-    displayName: string;
-    softwareDescription: string;
-    softwareVersion: string;
-    softwareOwner: string;
-    softwareDeveloper: string;
-    softwareManager: string;
-    softwareVisibility: "PUBLIC" | "PRIVATE";
-    softwareStatus: string;
-    repoName: string;
-    active: boolean;
-    price: number;
-    currency: string | null;
-    logoResourceId: string | null;
-    icon: string | null;
-    link: string | null;
-    category: string | null;
-    videoResources: any[];
+    url: string;
+    icon: string;
+    visible: boolean;
+    defaultSoftware: boolean;
+    order: number;
 }
 
 export interface User {
@@ -150,7 +138,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
             try {
                 const accessToken = await getValidAccessToken()
-                const response = await axios.get(`${baseUrl}/platform/software/accessible/account`, {
+                const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -255,7 +243,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                         className="h-10 w-10"
                                         asChild
                                     >
-                                        <Link href={software.link ?? "#"}>
+                                        <Link href={software.url ?? "#"}>
 
                                             {hasIcon ? (
                                                 <Icon
@@ -280,7 +268,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                 </nav>
 
                 {/* Last Visited */}
-                <Tooltip key="last-visited">
+                {/* <Tooltip key="last-visited">
                     <TooltipTrigger asChild className='h-8 w-8' >
                         <Button
                             variant="ghost"
@@ -297,10 +285,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                     <TooltipContent side="right" sideOffset={5}>
                         Last Visited
                     </TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
 
                 {/* Favourites */}
-                <Tooltip key="favourites">
+                {/* <Tooltip key="favourites">
                     <TooltipTrigger asChild className='h-8 w-8' >
                         <Button
                             variant="ghost"
@@ -317,7 +305,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                     <TooltipContent side="right" sideOffset={5}>
                         Favourites
                     </TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
 
                 {/* Settings */}
                 <Tooltip key="settings">
