@@ -1,0 +1,11 @@
+import { SubscribeSoftwareProps } from "../../api/softwareService/type";
+export declare const getBaseSoftwareId: () => Promise<string | undefined>;
+export declare const getOrSetBaseSoftwareId: () => Promise<string | undefined>;
+export declare const setBaseSoftwareId: (softwareId: string) => Promise<void>;
+export declare const getCurrentSoftwareId: () => Promise<string>;
+export declare const getCurrentAppName: () => Promise<string>;
+export declare const setCurrentSoftwareId: (softwareId: string) => Promise<void>;
+export declare const getSoftwareIdByNameVersion: (softwareName: string, version: string) => Promise<string>;
+export declare const setCurrentSoftwareIdByNameVersion: (softwareName: string, version: string) => Promise<void>;
+export declare const getAccessibleSoftware: (accountId: string, userId: string) => Promise<any>;
+export declare const getAllSubscribedSoftwares: (accountId?: string) => Promise<SubscribeSoftwareProps[]>;
