@@ -267,7 +267,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                     })}
                 </nav>
 
-                {/* Last Visited */}
+                {/* Last Visited g*/}
                 {/* <Tooltip key="last-visited">
                     <TooltipTrigger asChild className='h-8 w-8' >
                         <Button
