@@ -46,7 +46,7 @@ export async function getValidAccessToken(
   }
 
   if (!options?.isNotLogOutWhenExpire) {
-    await logOut();
+    await logOut(baseUrl);
   }
 
   return null;
@@ -107,8 +107,8 @@ export async function decodeAccessToken( baseUrl: string,) {
   return accessToken ? jwtDecode(accessToken) : null;
 }
 
-export async function logOut() {
+export async function logOut(baseUrl: string,) {
   await clearAllCookieSession();
   console.log("Logging out...");
-  redirect("/login.html");
+  redirect(`${baseUrl}/login.html`)
 }
