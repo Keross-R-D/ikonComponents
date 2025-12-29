@@ -73,7 +73,7 @@ export interface DecodedAccessToken {
 
 
 
-export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
+export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformUrl:string}) => {
 
 
     const [user, setUser] = React.useState<User>();
@@ -102,7 +102,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
         const fetchUser = async () => {
             try {
-                const accessToken = await getValidAccessToken()
+                const accessToken = await getValidAccessToken(baseUrl)
                 const decoded = jwtDecode<DecodedAccessToken>(accessToken ?? '');
 
                 const response = await axios.get(`${baseUrl}/platform/user/${decoded.sub}`, {
@@ -121,7 +121,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
         const fetchAccounts = async () => {
             try {
-                const accessToken = await getValidAccessToken()
+                const accessToken = await getValidAccessToken(baseUrl)
                 const response = await axios.get(`${baseUrl}/platform/account/all`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -137,7 +137,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
         const fetchSubscribedSoftwares = async () => {
 
             try {
-                const accessToken = await getValidAccessToken()
+                const accessToken = await getValidAccessToken(baseUrl)
                 const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -218,7 +218,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                 className="h-10 w-10"
                                 asChild
                             >
-                                <Link href="/home">
+                                <Link href={`${platformUrl}/home`}>
                                     <Home className="h-8 w-8" />
                                     <span className="sr-only">Home</span>
                                 </Link>
@@ -315,7 +315,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <Link href="/settings">
+                            <Link href={`${platformUrl}/settings`}>
                                 <Settings className="h-8 w-8" />
                                 <span className="sr-only">Settings</span>
                             </Link>
@@ -362,7 +362,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                         <DropdownMenuItem
                             onClick={async () => {
                                 await clearAllCookieSession()
-                                redirect("/login.html")
+                                 redirect(`${platformUrl}/login.html`)
                             }}
                             className="flex items-center gap-2 px-4 py-3 cursor-pointer focus:bg-destructive dark:focus:bg-destructive blue-dark:focus:bg-destructive"
                         >

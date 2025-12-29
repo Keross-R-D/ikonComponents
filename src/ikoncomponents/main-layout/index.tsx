@@ -7,16 +7,24 @@ import { Header } from './header'
 import { Footer } from './footer'
 import { SidebarNavProvider } from './SidebarNavContext'
 
-export function MainLayout({ children, baseUrl }: { children: ReactNode, baseUrl: string }) {
+export function MainLayout({ 
+    children, 
+    baseUrl, 
+    platformUrl 
+}: { 
+    children: ReactNode; 
+    baseUrl: string;
+    platformUrl: string;
+}) {
     return (
         <>
-            <MainSidebar baseUrl={baseUrl} />
+            <MainSidebar baseUrl={baseUrl} platformUrl={platformUrl} />
             <SidebarProvider>
                 <DialogProvider>
                     <SidebarNavProvider>
                         <AppSidebar />
                         <SidebarInset className="flex flex-col h-screen">
-                            <Header />
+                            <Header platformUrl={platformUrl} />
                             <div className="flex flex-col gap-4 p-4 pt-0 ml-12 grow overflow-auto scrollbar-hidden">
                                 {children}
                             </div>

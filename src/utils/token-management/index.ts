@@ -17,6 +17,7 @@ interface AccessTokenOptionsProps {
 let refreshPromise: Promise<string | null> | null = null;
 
 export async function getValidAccessToken(
+   baseUrl: string,
   options?: AccessTokenOptionsProps
 ): Promise<string | null> {
   const accessToken = await getCookieSession("accessToken");
@@ -38,7 +39,7 @@ export async function getValidAccessToken(
   if (refreshToken) {
     console.log("Refreshing access token using refresh token...", refreshToken);
     if (!refreshPromise) {
-      refreshPromise = refreshAccessToken(refreshToken, true);
+      refreshPromise = refreshAccessToken(refreshToken, baseUrl,true);
       refreshPromise.finally(() => (refreshPromise = null));
     }
     return await refreshPromise;
@@ -53,13 +54,14 @@ export async function getValidAccessToken(
 
 export async function refreshAccessToken(
   refreshToken: string,
+  baseUrl:string,
   isSetToken?: boolean
 ): Promise<string | null> {
   try {
     console.log("Refreshing access token...");
 
     const response = await fetch(
-      `https://ikoncloud-dev.keross.com/ikon-api/platform/auth/refresh-token`,
+      `${baseUrl}/platform/auth/refresh-token`,
       {
         method: "POST",
         credentials: "include",
@@ -100,8 +102,8 @@ export async function refreshAccessToken(
   }
 }
 
-export async function decodeAccessToken() {
-  const accessToken = await getValidAccessToken();
+export async function decodeAccessToken( baseUrl: string,) {
+  const accessToken = await getValidAccessToken(baseUrl);
   return accessToken ? jwtDecode(accessToken) : null;
 }
 
