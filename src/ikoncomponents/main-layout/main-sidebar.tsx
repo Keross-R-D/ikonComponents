@@ -157,6 +157,29 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
     }, []);
 
 
+    const switchAccount = async (accountId: string, baseUrl: string) => {
+  try {
+    const accessToken = await getValidAccessToken(baseUrl);
+    const response = await axios.post(
+      `${baseUrl}/platform/auth/switch-account`,
+      {
+        targetAccountId: accountId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      }
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 
     return (
         <TooltipProvider delayDuration={0}>
@@ -183,27 +206,37 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
                         <div className="px-2 py-1.5 text-xs font-semibold text-foreground">
                             Accounts
                         </div>
-                        {accounts.map((account) => (
-                            <DropdownMenuItem
-                                key={account.accountId}
-                                className="flex items-center justify-between cursor-pointer"
-                                onClick={() => {
-                                    setSelectedAccount(account)
-                                }}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center">
-                                        <span className="text-xs font-medium text-primary">
-                                            {getInitials(account.accountName)}
-                                        </span>
-                                    </div>
-                                    <span className="text-sm">{account.accountName}</span>
-                                </div>
-                                {selectedAccount?.accountId === account.accountId && (
-                                    <Check className="h-4 w-4 text-primary" />
-                                )}
-                            </DropdownMenuItem>
-                        ))}
+                       {accounts.map((account) => (
+  <DropdownMenuItem
+    key={account.accountId}
+    className="flex items-center justify-between cursor-pointer"
+    onClick={async () => {
+      try {
+        setSelectedAccount(account);
+        console.log(account.accountId);
+
+        const res = await switchAccount(account.accountId, baseUrl); // Pass baseUrl
+        console.log(res);
+        window.location.reload(); // Reload to apply new account context
+      } catch (error) {
+        console.error("Switch account failed", error);
+      }
+    }}
+  >
+    <div className="flex items-center gap-2">
+      <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center">
+        <span className="text-xs font-medium text-primary">
+          {getInitials(account.accountName)}
+        </span>
+      </div>
+      <span className="text-sm">{account.accountName}</span>
+    </div>
+
+    {selectedAccount?.accountId === account.accountId && (
+      <Check className="h-4 w-4 text-primary" />
+    )}
+  </DropdownMenuItem>
+))}
                     </DropdownMenuContent>
                 </DropdownMenu>
 
