@@ -2,7 +2,7 @@
 import React from "react";
 import { AlignJustify } from "lucide-react";
 import { TabArray } from "../tabs/type";
-import {Tabs} from "../tabs";
+import {CustomTabs} from "../tabs";
 import {NoDataComponent} from "../no-data";
 import {UploadTab} from "../upload-tab";
 import { SheetComponent } from "../sheet";
@@ -56,7 +56,7 @@ export function ActivitySheet({ activityLogs = [] }: { activityLogs?: ActivityLo
       buttonText=""
       buttonIcon={<AlignJustify />}
       sheetTitle=""
-      sheetContent={<Tabs tabArray={tabArray} tabListClass='' />}
+      sheetContent={<CustomTabs tabArray={tabArray} tabListClass='' />}
       closeButton={true}
     />
   );

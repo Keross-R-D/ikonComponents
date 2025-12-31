@@ -19,7 +19,7 @@ import React, { useEffect, useState } from "react";
 import { useIsMobile } from "../../hooks/use-mobile";
 
 
-export function Tabs({
+export function CustomTabs({
   children,
   tabArray,
   pathName,

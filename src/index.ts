@@ -113,7 +113,7 @@ export { PhoneInput } from "./ikoncomponents/phone-input";
 export { SearchInput } from "./ikoncomponents/search-input";
 export { SheetComponent } from "./ikoncomponents/sheet";
 export { SimpleWidget } from "./ikoncomponents/simple-widget";
-export { Tabs } from "./ikoncomponents/tabs";
+export { CustomTabs } from "./ikoncomponents/tabs";
 export type { TabArray, TabProps } from "./ikoncomponents/tabs/type";
 export { ThemeToggleBtn } from "./ikoncomponents/theme-toggle-btn";
 export { TitleProgress } from "./ikoncomponents/title-progress";
