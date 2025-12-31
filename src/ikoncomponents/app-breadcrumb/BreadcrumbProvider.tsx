@@ -13,6 +13,8 @@ interface BreadcrumbContextType {
   breadcrumbItems: BreadcrumbItemProps[];
   addBreadcrumb: (item: BreadcrumbItemProps) => void;
   backBreadcrumb: (item: BreadcrumbItemProps) => void;
+  addBreadcrumbItems: (items: BreadcrumbItemProps[], isReplace?: boolean) => void;
+  clearBreadcrumb: () => void;
 }
 
 // Create the context with a default value
@@ -29,6 +31,14 @@ export function BreadcrumbProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const addBreadcrumbItems = (items: BreadcrumbItemProps[], isReplace?: boolean) => {
+    if (isReplace) {
+      setBreadcrumbItems(items);
+    } else {
+      setBreadcrumbItems((prevItems) => [...prevItems, ...items]);
+    }
+  };
+
   // Function to go back in the breadcrumb
   const backBreadcrumb = (item: BreadcrumbItemProps) => {
     setBreadcrumbItems((prevItems) => {
@@ -37,8 +47,12 @@ export function BreadcrumbProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const clearBreadcrumb = () => {
+    setBreadcrumbItems([]);
+  };
+
   return (
-    <BreadcrumbContext.Provider value={{ breadcrumbItems, addBreadcrumb, backBreadcrumb }}>
+    <BreadcrumbContext.Provider value={{ breadcrumbItems, addBreadcrumb, backBreadcrumb, addBreadcrumbItems, clearBreadcrumb }}>
       {children}
     </BreadcrumbContext.Provider>
   );

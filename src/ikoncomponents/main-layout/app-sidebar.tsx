@@ -13,7 +13,7 @@ import { useSidebarNav } from "./SidebarNavContext";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
-  const { navItems } = useSidebarNav();
+  const { navItems, header, footer } = useSidebarNav();
   if (!navItems || navItems.length === 0) {
     return null;
   }
@@ -21,12 +21,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar className="ml-12" collapsible={"offcanvas"} {...props}>
+      {header && <SidebarHeader>
+        {header}
+      </SidebarHeader>}
       <SidebarContent>
         <NavMain />
       </SidebarContent>
-      <SidebarFooter>
-        {/* Add footer content if needed */}
-      </SidebarFooter>
+      {footer && <SidebarFooter>
+        {footer}
+      </SidebarFooter>}
       <SidebarRail />
     </Sidebar>
   );

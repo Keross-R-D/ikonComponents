@@ -73,7 +73,7 @@ export interface DecodedAccessToken {
 
 
 
-export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformUrl:string}) => {
+export const MainSidebar = ({ baseUrl, platformUrl }: { baseUrl: string, platformUrl: string }) => {
 
 
     const [user, setUser] = React.useState<User>();
@@ -102,7 +102,10 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
 
         const fetchUser = async () => {
             try {
-                const accessToken = await getValidAccessToken(baseUrl)
+                const accessToken = await getValidAccessToken(baseUrl, {
+                    platformUrl: platformUrl,
+                    isSetToken: true
+                })
                 const decoded = jwtDecode<DecodedAccessToken>(accessToken ?? '');
 
                 const response = await axios.get(`${baseUrl}/platform/user/${decoded.sub}`, {
@@ -121,7 +124,12 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
 
         const fetchAccounts = async () => {
             try {
-                const accessToken = await getValidAccessToken(baseUrl)
+                const accessToken = await getValidAccessToken(baseUrl,
+                    {
+                        platformUrl: platformUrl,
+                        isSetToken: true
+                    }
+                )
                 const response = await axios.get(`${baseUrl}/platform/account/all`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -137,7 +145,12 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
         const fetchSubscribedSoftwares = async () => {
 
             try {
-                const accessToken = await getValidAccessToken(baseUrl)
+                const accessToken = await getValidAccessToken(baseUrl,
+                    {
+                        platformUrl: platformUrl,
+                        isSetToken: true
+                    }
+                )
                 const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -158,27 +171,30 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
 
 
     const switchAccount = async (accountId: string, baseUrl: string) => {
-  try {
-    const accessToken = await getValidAccessToken(baseUrl);
-    const response = await axios.post(
-      `${baseUrl}/platform/auth/switch-account`,
-      {
-        targetAccountId: accountId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true,
-      }
-    );
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+        try {
+            const accessToken = await getValidAccessToken(baseUrl, {
+                platformUrl: platformUrl,
+                isSetToken: true
+            });
+            const response = await axios.post(
+                `${baseUrl}/platform/auth/switch-account`,
+                {
+                    targetAccountId: accountId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    withCredentials: true,
+                }
+            );
+            console.log(response);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 
 
     return (
@@ -206,37 +222,37 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
                         <div className="px-2 py-1.5 text-xs font-semibold text-foreground">
                             Accounts
                         </div>
-                       {accounts.map((account) => (
-  <DropdownMenuItem
-    key={account.accountId}
-    className="flex items-center justify-between cursor-pointer"
-    onClick={async () => {
-      try {
-        setSelectedAccount(account);
-        console.log(account.accountId);
+                        {accounts.map((account) => (
+                            <DropdownMenuItem
+                                key={account.accountId}
+                                className="flex items-center justify-between cursor-pointer"
+                                onClick={async () => {
+                                    try {
+                                        setSelectedAccount(account);
+                                        console.log(account.accountId);
 
-        const res = await switchAccount(account.accountId, baseUrl); // Pass baseUrl
-        console.log(res);
-        window.location.reload(); // Reload to apply new account context
-      } catch (error) {
-        console.error("Switch account failed", error);
-      }
-    }}
-  >
-    <div className="flex items-center gap-2">
-      <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center">
-        <span className="text-xs font-medium text-primary">
-          {getInitials(account.accountName)}
-        </span>
-      </div>
-      <span className="text-sm">{account.accountName}</span>
-    </div>
+                                        const res = await switchAccount(account.accountId, baseUrl); // Pass baseUrl
+                                        console.log(res);
+                                        window.location.reload(); // Reload to apply new account context
+                                    } catch (error) {
+                                        console.error("Switch account failed", error);
+                                    }
+                                }}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center">
+                                        <span className="text-xs font-medium text-primary">
+                                            {getInitials(account.accountName)}
+                                        </span>
+                                    </div>
+                                    <span className="text-sm">{account.accountName}</span>
+                                </div>
 
-    {selectedAccount?.accountId === account.accountId && (
-      <Check className="h-4 w-4 text-primary" />
-    )}
-  </DropdownMenuItem>
-))}
+                                {selectedAccount?.accountId === account.accountId && (
+                                    <Check className="h-4 w-4 text-primary" />
+                                )}
+                            </DropdownMenuItem>
+                        ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
 
@@ -395,7 +411,7 @@ export const MainSidebar = ({ baseUrl,platformUrl}: { baseUrl: string ,platformU
                         <DropdownMenuItem
                             onClick={async () => {
                                 await clearAllCookieSession()
-                                 redirect(`${platformUrl}/login.html`)
+                                redirect(`${platformUrl}/login.html`)
                             }}
                             className="flex items-center gap-2 px-4 py-3 cursor-pointer focus:bg-destructive dark:focus:bg-destructive blue-dark:focus:bg-destructive"
                         >

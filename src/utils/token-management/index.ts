@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 
 interface AccessTokenOptionsProps {
   isNotLogOutWhenExpire?: boolean;
+  platformUrl?: string;
   isSetToken?: boolean;
 }
 
@@ -17,7 +18,7 @@ interface AccessTokenOptionsProps {
 let refreshPromise: Promise<string | null> | null = null;
 
 export async function getValidAccessToken(
-   baseUrl: string,
+  baseUrl: string,
   options?: AccessTokenOptionsProps
 ): Promise<string | null> {
   const accessToken = await getCookieSession("accessToken");
@@ -39,14 +40,14 @@ export async function getValidAccessToken(
   if (refreshToken) {
     console.log("Refreshing access token using refresh token...", refreshToken);
     if (!refreshPromise) {
-      refreshPromise = refreshAccessToken(refreshToken, baseUrl,true);
+      refreshPromise = refreshAccessToken(refreshToken, baseUrl, options?.isSetToken);
       refreshPromise.finally(() => (refreshPromise = null));
     }
     return await refreshPromise;
   }
 
-  if (!options?.isNotLogOutWhenExpire) {
-    await logOut(baseUrl);
+  if (!options?.isNotLogOutWhenExpire && options?.platformUrl) {
+    await logOut(options?.platformUrl);
   }
 
   return null;
@@ -54,7 +55,7 @@ export async function getValidAccessToken(
 
 export async function refreshAccessToken(
   refreshToken: string,
-  baseUrl:string,
+  baseUrl: string,
   isSetToken?: boolean
 ): Promise<string | null> {
   try {
@@ -102,13 +103,13 @@ export async function refreshAccessToken(
   }
 }
 
-export async function decodeAccessToken( baseUrl: string,) {
+export async function decodeAccessToken(baseUrl: string,) {
   const accessToken = await getValidAccessToken(baseUrl);
   return accessToken ? jwtDecode(accessToken) : null;
 }
 
-export async function logOut(baseUrl: string,) {
+export async function logOut(platformUrl: string,) {
   await clearAllCookieSession();
   console.log("Logging out...");
-  redirect(`${baseUrl}/login.html`)
+  redirect(`${platformUrl}/login.html`)
 }
