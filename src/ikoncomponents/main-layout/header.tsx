@@ -10,7 +10,7 @@ import { IconButton, IconButtonWithTooltip, IconTextButton } from "../buttons";
 import { useSidebarNav } from "./SidebarNavContext";
 import Link from "next/link";
 
-export function Header() {
+export function Header({ platformUrl }: { platformUrl: string }) {
 
   const { navItems } = useSidebarNav();
 
@@ -35,7 +35,7 @@ export function Header() {
             <Bell />
           </IconButtonWithTooltip>
           <ThemeToggleBtn />
-          <Link href={"/app-store"}>
+          <Link href={`${platformUrl}/app-store`}>
             <IconTextButton
               variant={"default"}
             >

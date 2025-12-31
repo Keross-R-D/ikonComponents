@@ -73,7 +73,7 @@ export interface DecodedAccessToken {
 
 
 
-export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
+export const MainSidebar = ({ baseUrl, platformUrl }: { baseUrl: string, platformUrl: string }) => {
 
 
     const [user, setUser] = React.useState<User>();
@@ -102,7 +102,10 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
         const fetchUser = async () => {
             try {
-                const accessToken = await getValidAccessToken()
+                const accessToken = await getValidAccessToken(baseUrl, {
+                    platformUrl: platformUrl,
+                    isSetToken: true
+                })
                 const decoded = jwtDecode<DecodedAccessToken>(accessToken ?? '');
 
                 const response = await axios.get(`${baseUrl}/platform/user/${decoded.sub}`, {
@@ -121,7 +124,12 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
 
         const fetchAccounts = async () => {
             try {
-                const accessToken = await getValidAccessToken()
+                const accessToken = await getValidAccessToken(baseUrl,
+                    {
+                        platformUrl: platformUrl,
+                        isSetToken: true
+                    }
+                )
                 const response = await axios.get(`${baseUrl}/platform/account/all`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -137,7 +145,12 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
         const fetchSubscribedSoftwares = async () => {
 
             try {
-                const accessToken = await getValidAccessToken()
+                const accessToken = await getValidAccessToken(baseUrl,
+                    {
+                        platformUrl: platformUrl,
+                        isSetToken: true
+                    }
+                )
                 const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -156,6 +169,32 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
         fetchUser();
     }, []);
 
+
+    const switchAccount = async (accountId: string, baseUrl: string) => {
+        try {
+            const accessToken = await getValidAccessToken(baseUrl, {
+                platformUrl: platformUrl,
+                isSetToken: true
+            });
+            const response = await axios.post(
+                `${baseUrl}/platform/auth/switch-account`,
+                {
+                    targetAccountId: accountId,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    withCredentials: true,
+                }
+            );
+            console.log(response);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 
 
     return (
@@ -187,8 +226,17 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             <DropdownMenuItem
                                 key={account.accountId}
                                 className="flex items-center justify-between cursor-pointer"
-                                onClick={() => {
-                                    setSelectedAccount(account)
+                                onClick={async () => {
+                                    try {
+                                        setSelectedAccount(account);
+                                        console.log(account.accountId);
+
+                                        const res = await switchAccount(account.accountId, baseUrl); // Pass baseUrl
+                                        console.log(res);
+                                        window.location.reload(); // Reload to apply new account context
+                                    } catch (error) {
+                                        console.error("Switch account failed", error);
+                                    }
                                 }}
                             >
                                 <div className="flex items-center gap-2">
@@ -199,6 +247,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                     </div>
                                     <span className="text-sm">{account.accountName}</span>
                                 </div>
+
                                 {selectedAccount?.accountId === account.accountId && (
                                     <Check className="h-4 w-4 text-primary" />
                                 )}
@@ -218,7 +267,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                                 className="h-10 w-10"
                                 asChild
                             >
-                                <Link href="/home">
+                                <Link href={`${platformUrl}/home`}>
                                     <Home className="h-8 w-8" />
                                     <span className="sr-only">Home</span>
                                 </Link>
@@ -315,7 +364,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                             className="h-10 w-10"
                             asChild
                         >
-                            <Link href="/settings">
+                            <Link href={`${platformUrl}/settings`}>
                                 <Settings className="h-8 w-8" />
                                 <span className="sr-only">Settings</span>
                             </Link>
@@ -362,7 +411,7 @@ export const MainSidebar = ({ baseUrl }: { baseUrl: string }) => {
                         <DropdownMenuItem
                             onClick={async () => {
                                 await clearAllCookieSession()
-                                redirect("/login.html")
+                                redirect(`${platformUrl}/login.html`)
                             }}
                             className="flex items-center gap-2 px-4 py-3 cursor-pointer focus:bg-destructive dark:focus:bg-destructive blue-dark:focus:bg-destructive"
                         >

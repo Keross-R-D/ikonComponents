@@ -15,21 +15,29 @@ export interface SidebarNavItem {
     isActive?: boolean;
     default?: boolean;
     items?: SidebarNavSubItem[];
+    header?: ReactNode;
+    footer?: ReactNode;
 }
 
 export interface SidebarNavContextType {
     navItems: SidebarNavItem[];
+    header: ReactNode | null;
+    footer: ReactNode | null;
     setNavItems: (items: SidebarNavItem[]) => void;
     addNavItem: (item: SidebarNavItem) => void;
     removeNavItem: (title: string) => void;
     updateNavItem: (title: string, updates: Partial<SidebarNavItem>) => void;
     clearNavItems: () => void;
+    setSidebarHeader: (header: ReactNode) => void;
+    setSidebarFooter: (footer: ReactNode) => void;
 }
 
 const SidebarNavContext = createContext<SidebarNavContextType | undefined>(undefined);
 
 export function SidebarNavProvider({ children }: { children: ReactNode }) {
     const [navItems, setNavItems] = useState<SidebarNavItem[]>([]);
+    const [header, setHeader] = useState<ReactNode | null>(null);
+    const [footer, setFooter] = useState<ReactNode | null>(null);
 
     const addNavItem = (item: SidebarNavItem) => {
         setNavItems((prevItems) => {
@@ -55,6 +63,13 @@ export function SidebarNavProvider({ children }: { children: ReactNode }) {
         );
     };
 
+    const setSidebarHeader = (header: ReactNode) => {
+        setHeader(header);
+    };
+    const setSidebarFooter = (footer: ReactNode) => {
+        setFooter(footer);
+    };
+
     const clearNavItems = () => {
         setNavItems([]);
     };
@@ -63,11 +78,15 @@ export function SidebarNavProvider({ children }: { children: ReactNode }) {
         <SidebarNavContext.Provider
             value={{
                 navItems,
+                header,
+                footer,
                 setNavItems,
                 addNavItem,
                 removeNavItem,
                 updateNavItem,
                 clearNavItems,
+                setSidebarHeader,
+                setSidebarFooter,
             }}
         >
             {children}
