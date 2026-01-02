@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react";
+import { ReactNode, useEffect, } from "react";
 import { ChevronRight } from "lucide-react";
 import {
   SidebarGroup,
@@ -77,11 +77,11 @@ export function NavMain() {
 }
 
 // Helper component to set nav items from pages
-export function RenderSidebarNav({ items }: { items: SidebarNavItem[] }) {
+export function RenderSidebarNav({ items, sidebarHeader, sidebarFooter }: { items: SidebarNavItem[], sidebarHeader?: ReactNode, sidebarFooter?: ReactNode }) {
   const { setNavItems } = useSidebarNav();
 
   useEffect(() => {
-    setNavItems(items);
+    setNavItems(items, sidebarHeader, sidebarFooter);
   }, [items, setNavItems]);
 
   return null;

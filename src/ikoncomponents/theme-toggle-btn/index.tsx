@@ -44,7 +44,7 @@ export function ThemeToggleBtn() {
     const applySavedColors = useCallback(() => {
         const primaryColor = localStorage.getItem("primary") || '#0f172b';
         const secondaryColor = localStorage.getItem("secondary") || '#1b2336';
-        const tertiaryColor = localStorage.getItem("tertiary") || '#010416';
+        const tertiaryColor = localStorage.getItem("tertiary") || '#1f3aba';
 
         const pChartColor = localStorage.getItem("primaryChart") || '#00bc7d';
         const sChartColor = localStorage.getItem("secondaryChart") || '#fd9a00';

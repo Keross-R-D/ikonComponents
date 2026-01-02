@@ -7,13 +7,23 @@ import { RadiusProvider } from "../../utils/border-radius-provider";
 import { BreadcrumbProvider } from "../app-breadcrumb/BreadcrumbProvider";
 import { MainLayout } from "../main-layout";
 
-export function ProviderWrapper({ children, baseUrl }: { children: React.ReactNode, baseUrl: string }) {
+export function ProviderWrapper({ 
+    children, 
+    baseUrl, 
+    platformUrl 
+}: { 
+    children: React.ReactNode; 
+    baseUrl: string;
+    platformUrl: string;
+}) {
     return (
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <FontProvider>
                 <RadiusProvider>
                     <BreadcrumbProvider>
-                        <MainLayout baseUrl={baseUrl} >{children}</MainLayout>
+                        <MainLayout baseUrl={baseUrl} platformUrl={platformUrl}>
+                            {children}
+                        </MainLayout>
                     </BreadcrumbProvider>
                 </RadiusProvider>
             </FontProvider>
