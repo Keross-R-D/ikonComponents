@@ -113,7 +113,7 @@ export { PhoneInput } from "./ikoncomponents/phone-input";
 export { SearchInput } from "./ikoncomponents/search-input";
 export { SheetComponent } from "./ikoncomponents/sheet";
 export { SimpleWidget } from "./ikoncomponents/simple-widget";
-export { Tabs } from "./ikoncomponents/tabs";
+export { CustomTabs } from "./ikoncomponents/tabs";
 export type { TabArray, TabProps } from "./ikoncomponents/tabs/type";
 export { ThemeToggleBtn } from "./ikoncomponents/theme-toggle-btn";
 export { TitleProgress } from "./ikoncomponents/title-progress";
@@ -223,10 +223,10 @@ export {
 } from "./utils/session/cookieSession";
 export {
   getValidAccessToken,
-  refreshAccessToken,
+  decodeAccessToken,
   logOut,
+  refreshAccessToken
 } from "./utils/token-management";
-export type { AccessTokenOptionsProps } from "./utils/token-management";
 export type { TokenResponse } from "./utils/token-management/types";
 
 export { useIsMobile } from "./hooks/use-mobile";
