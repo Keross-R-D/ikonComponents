@@ -142,27 +142,56 @@ export const MainSidebar = ({ baseUrl, platformUrl }: { baseUrl: string, platfor
             }
         };
 
-        const fetchSubscribedSoftwares = async () => {
+        // const fetchSubscribedSoftwares = async () => {
 
-            try {
-                const accessToken = await getValidAccessToken(baseUrl,
-                    {
-                        platformUrl: platformUrl,
-                        isSetToken: true
-                    }
-                )
-                const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
-                setSoftwares(response.data)
-            } catch (error) {
-                console.error(error)
-            }
+        //     try {
+        //         const accessToken = await getValidAccessToken(baseUrl,
+        //             {
+        //                 platformUrl: platformUrl,
+        //                 isSetToken: true
+        //             }
+        //         )
+        //         const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
+        //             headers: {
+        //                 Authorization: `Bearer ${accessToken}`,
+        //             },
+        //         });
+        //         setSoftwares(response.data)
+        //     } catch (error) {
+        //         console.error(error)
+        //     }
 
 
-        }
+        // }
+const fetchSubscribedSoftwares = async () => {
+  try {
+    const accessToken = await getValidAccessToken(baseUrl, {
+      platformUrl,
+      isSetToken: true,
+    });
+
+    const response = await axios.get(
+      `${baseUrl}/platform/software/accessible/user`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    
+    const visibleSoftwares = response.data.filter(
+      (item: { visible: boolean }) => item.visible === true
+    );
+
+   
+    setSoftwares(visibleSoftwares);
+  } catch (error) {
+    console.error("Failed to fetch subscribed softwares:", error);
+  }
+};
+
+
 
         fetchAccounts();
         fetchSubscribedSoftwares();
