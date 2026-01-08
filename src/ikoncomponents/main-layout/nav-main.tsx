@@ -78,11 +78,14 @@ export function NavMain() {
 
 // Helper component to set nav items from pages
 export function RenderSidebarNav({ items, sidebarHeader, sidebarFooter }: { items: SidebarNavItem[], sidebarHeader?: ReactNode, sidebarFooter?: ReactNode }) {
-  const { setNavItems } = useSidebarNav();
+  const { setNavItems,setSidebarHeader, setSidebarFooter } = useSidebarNav();
+
 
   useEffect(() => {
-    setNavItems(items, sidebarHeader, sidebarFooter);
-  }, [items, setNavItems]);
+    setNavItems(items);
+    setSidebarHeader(sidebarHeader);
+    setSidebarFooter(sidebarFooter);
+  }, [items, sidebarHeader, sidebarFooter, setNavItems, setSidebarHeader, setSidebarFooter]);
 
   return null;
 }
