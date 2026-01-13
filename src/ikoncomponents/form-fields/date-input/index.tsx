@@ -60,6 +60,7 @@ export function FormDateInput({
                   selected={field.value}
                   onSelect={field.onChange}
                   disabled={calendarDateDisabled}
+                   captionLayout="dropdown"
                   // disabled={(date) =>
                   //   date > new Date() || date < new Date("1900-01-01")
                   // }
