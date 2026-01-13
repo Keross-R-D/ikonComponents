@@ -35,6 +35,13 @@ import { jwtDecode } from "jwt-decode";
 import { Icon } from "../icon";
 import { useRefresh } from "./RefreshContext";
 
+
+export interface AccountMembership {
+  accountId: string;
+  accountName: string;
+  primaryAccount?: boolean; // optional if not always present
+}
+
 export interface Account {
   accountId: string;
   accountName: string;
@@ -98,9 +105,9 @@ export const MainSidebar = ({
   platformUrl: string;
 }) => {
   const [user, setUser] = React.useState<User>();
-  const [accounts, setAccounts] = React.useState<Account[]>([]);
+  const [accounts, setAccounts] = React.useState<AccountMembership[]>([]);
   const [selectedAccount, setSelectedAccount] = React.useState<
-    Account | undefined
+    AccountMembership | undefined
   >();
   const [softwares, setSoftwares] = React.useState<Software[]>([]);
   const { refreshCounter } = useRefresh();
@@ -138,9 +145,12 @@ export const MainSidebar = ({
             axios.get(`${baseUrl}/platform/user/${decoded.sub}`, {
               headers: { Authorization: `Bearer ${accessToken}` },
             }),
-            axios.get(`${baseUrl}/platform/user/account-membership`, {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            }),
+            axios.get<AccountMembership[]>(
+      `${baseUrl}/platform/user/account-membership`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    ),
             axios.get(`${baseUrl}/platform/software/accessible/user`, {
               headers: { Authorization: `Bearer ${accessToken}` },
             }),
