@@ -18,6 +18,7 @@ export function MainLayout({
 }) {
     return (
         <>
+        
             <MainSidebar baseUrl={baseUrl} platformUrl={platformUrl} />
             <SidebarProvider>
                 <DialogProvider>
