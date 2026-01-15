@@ -25,15 +25,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../shadcn/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../../shadcn/avatar";
+
 import { getValidAccessToken } from "../../utils/token-management";
-import { clearAllCookieSession } from "../../utils/session/cookieSession";
+import { clearAllCookieSession, setCookieSession } from "../../utils/session/cookieSession";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 import { Icon } from "../icon";
-import { getAccessibleSoftwareForUser } from "./softwareApi";
+import { useRefresh } from "./RefreshContext";
+
+
+export interface AccountMembership {
+  accountId: string;
+  accountName: string;
+  primaryAccount?: boolean; // optional if not always present
+}
 
 export interface Account {
   accountId: string;
@@ -98,11 +105,12 @@ export const MainSidebar = ({
   platformUrl: string;
 }) => {
   const [user, setUser] = React.useState<User>();
-  const [accounts, setAccounts] = React.useState<Account[]>([]);
+  const [accounts, setAccounts] = React.useState<AccountMembership[]>([]);
   const [selectedAccount, setSelectedAccount] = React.useState<
-    Account | undefined
+    AccountMembership | undefined
   >();
   const [softwares, setSoftwares] = React.useState<Software[]>([]);
+  const { refreshCounter } = useRefresh();
 
   const getInitials = (name: string) => {
     return name
@@ -120,106 +128,62 @@ export const MainSidebar = ({
       .join("");
   }
 
+  // Fetch all data
   React.useEffect(() => {
-    const fetchUser = async () => {
+    const fetchAllData = async () => {
       try {
         const accessToken = await getValidAccessToken(baseUrl, {
-          platformUrl: platformUrl,
+          platformUrl,
           isSetToken: true,
         });
+
         const decoded = jwtDecode<DecodedAccessToken>(accessToken ?? "");
 
-        const response = await axios.get(
-          `${baseUrl}/platform/user/${decoded.sub}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        setUser(response.data);
-      } catch (error) {
-        console.error(error);
+        // Fetch all data in parallel
+        const [userResponse, accountsResponse, softwaresResponse] =
+          await Promise.all([
+            axios.get(`${baseUrl}/platform/user/${decoded.sub}`, {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }),
+            axios.get<AccountMembership[]>(
+      `${baseUrl}/platform/user/account-membership`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
-    };
+    ),
+            axios.get(`${baseUrl}/platform/software/accessible/user`, {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }),
+          ]);
 
-    const fetchAccounts = async () => {
-      try {
-        const accessToken = await getValidAccessToken(baseUrl, {
-          platformUrl: platformUrl,
-          isSetToken: true,
-        });
-        const response = await axios.get(`${baseUrl}/platform/account/all`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        setAccounts(response.data);
-        setSelectedAccount(response.data[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+        setUser(userResponse.data);
+        setAccounts(accountsResponse.data);
 
-    // const fetchSubscribedSoftwares = async () => {
-
-    //     try {
-    //         const accessToken = await getValidAccessToken(baseUrl,
-    //             {
-    //                 platformUrl: platformUrl,
-    //                 isSetToken: true
-    //             }
-    //         )
-    //         const response = await axios.get(`${baseUrl}/platform/software/accessible/user`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${accessToken}`,
-    //             },
-    //         });
-    //         setSoftwares(response.data)
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-
-    // }
-    const fetchSubscribedSoftwares = async () => {
-      try {
-        // const accessToken = await getValidAccessToken(baseUrl, {
-        //   platformUrl,
-        //   isSetToken: true,
-        // });
-
-        // const response = await axios.get(
-        //   `${baseUrl}/platform/software/accessible/user`,
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${accessToken}`,
-        //     },
-        //   }
+        // const primaryAccount = accountsResponse.data.find(
+        //   (account) => account.primaryAccount === true
         // );
 
-        // const visibleSoftwares = response.data.filter(
-        //   (item: { visible: boolean }) => item.visible === true
-        // );
-        const softwares = await getAccessibleSoftwareForUser(
-          baseUrl,
-          platformUrl
+        // if (primaryAccount) {
+        //   setSelectedAccount(primaryAccount);
+        // }
+
+        const activeAccount = accountsResponse.data.find(
+          (account) => account.accountId === decoded.activeAccountId
         );
 
-        const visibleSoftwares = softwares.filter(
-          (item: { visible: boolean }) => item.visible === true
-        );
+        setSelectedAccount(activeAccount);
 
+        const visibleSoftwares = softwaresResponse.data.filter(
+          (item: { visible: boolean }) => item.visible
+        );
         setSoftwares(visibleSoftwares);
       } catch (error) {
-        console.error("Failed to fetch subscribed softwares:", error);
+        console.error("Failed to fetch data:", error);
       }
     };
 
-    fetchAccounts();
-    fetchSubscribedSoftwares();
-    fetchUser();
-  }, []);
+    fetchAllData();
+  }, [baseUrl, platformUrl, refreshCounter]);
 
   const switchAccount = async (accountId: string, baseUrl: string) => {
     try {
@@ -240,7 +204,8 @@ export const MainSidebar = ({
         }
       );
       console.log(response);
-      return response.data;
+      await setCookieSession("accessToken", response.data.accessToken);
+      await setCookieSession("refreshToken", response.data.refreshToken);
     } catch (error) {
       console.error(error);
       throw error;
@@ -283,9 +248,9 @@ export const MainSidebar = ({
                     setSelectedAccount(account);
                     console.log(account.accountId);
 
-                    const res = await switchAccount(account.accountId, baseUrl); // Pass baseUrl
-                    console.log(res);
-                    window.location.reload(); // Reload to apply new account context
+                    await switchAccount(account.accountId, baseUrl);
+
+                    window.location.reload();
                   } catch (error) {
                     console.error("Switch account failed", error);
                   }
@@ -361,46 +326,6 @@ export const MainSidebar = ({
             );
           })}
         </nav>
-
-        {/* Last Visited g*/}
-        {/* <Tooltip key="last-visited">
-                    <TooltipTrigger asChild className='h-8 w-8' >
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-10 w-10"
-                            asChild
-                        >
-                            <Link href="/last-visited">
-                                <Clock className="h-8 w-8" />
-                                <span className="sr-only">Last Visited</span>
-                            </Link>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" sideOffset={5}>
-                        Last Visited
-                    </TooltipContent>
-                </Tooltip> */}
-
-        {/* Favourites */}
-        {/* <Tooltip key="favourites">
-                    <TooltipTrigger asChild className='h-8 w-8' >
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-10 w-10"
-                            asChild
-                        >
-                            <Link href="/favourites">
-                                <Heart className="h-8 w-8" />
-                                <span className="sr-only">Favourites</span>
-                            </Link>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" sideOffset={5}>
-                        Favourites
-                    </TooltipContent>
-                </Tooltip> */}
 
         {/* Settings */}
         <Tooltip key="settings">

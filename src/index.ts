@@ -226,9 +226,9 @@ export {
   getValidAccessToken,
   refreshAccessToken,
   decodeAccessToken,
-  logOut,
-  refreshAccessToken
+  logOut
 } from "./utils/token-management";
 export type { TokenResponse } from "./utils/token-management/types";
 
 export { useIsMobile } from "./hooks/use-mobile";
+export {useRefresh} from "./ikoncomponents/main-layout/RefreshContext";
