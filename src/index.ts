@@ -44,6 +44,9 @@ export * from "./shadcn/input-otp";
 export * from "./shadcn/toggle-group";
 export * from "./shadcn/toggle";
 
+export * from "./vendor/assistant-ui-react";
+export * from "./vendor/assistant-ui-ai-sdk";
+
 export { ActionMenu } from "./ikoncomponents/action-menu";
 export type {
   ActionMenuProps,
@@ -210,6 +213,7 @@ export { NewImageForm } from "./ikoncomponents/image-cropper-upload/components/n
 export type { ImageFormProps } from "./ikoncomponents/image-cropper-upload/components/newImageUploadForm";
 export { WorkInProgress } from "./ikoncomponents/work-in-progress";
 export { CustomComboboxInput } from "./ikoncomponents/custom-combo-dropdown"
+export { AssistantComponent } from "./ikoncomponents/assistant-ui/Assistant";
 
 export { ThemeProvider } from "./utils/theme-provider";
 export { RadiusProvider, useRadius } from "./utils/border-radius-provider";

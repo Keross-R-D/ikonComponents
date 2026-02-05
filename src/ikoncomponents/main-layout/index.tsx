@@ -1,3 +1,5 @@
+"use client"
+
 import React, { ReactNode } from 'react'
 import { MainSidebar } from './main-sidebar'
 import { SidebarInset, SidebarProvider } from '../../shadcn/sidebar'
