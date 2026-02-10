@@ -9,7 +9,7 @@ import {
     MessagePrimitive,
     useAssistantState,
     useAssistantApi,
-} from "../../vendor/assistant-ui-react/src";
+} from "@assistant-ui/react";
 import { useShallow } from "zustand/shallow";
 import {
     Tooltip,

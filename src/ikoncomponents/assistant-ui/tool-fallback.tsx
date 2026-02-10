@@ -1,6 +1,6 @@
 "use client";
 
-import type { ToolCallMessagePartComponent } from "../../vendor/assistant-ui-react/src";
+import type { ToolCallMessagePartComponent } from "@assistant-ui/react";
 import {
     CheckIcon,
     ChevronDownIcon,

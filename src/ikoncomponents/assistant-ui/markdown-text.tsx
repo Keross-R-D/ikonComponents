@@ -1,13 +1,13 @@
 "use client";
 
-import "../../vendor/assistant-ui-markdown/src";
+import "@assistant-ui/react-markdown";
 
 import {
     type CodeHeaderProps,
     MarkdownTextPrimitive,
     unstable_memoizeMarkdownComponents as memoizeMarkdownComponents,
     useIsMarkdownCodeBlock,
-} from "../../vendor/assistant-ui-markdown/src";
+} from "@assistant-ui/react-markdown";
 import remarkGfm from "remark-gfm";
 import { type FC, memo, useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";

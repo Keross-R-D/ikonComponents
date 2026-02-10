@@ -19,7 +19,7 @@ import {
     ErrorPrimitive,
     MessagePrimitive,
     ThreadPrimitive,
-} from "../../vendor/assistant-ui-react/src";
+} from "@assistant-ui/react";
 
 import { type FC } from "react";
 import { LazyMotion, MotionConfig, domAnimation } from "motion/react";

@@ -14,6 +14,7 @@ export interface AgentTextChatTransportOptions {
   temperature?: number;
   maxTokens?: number;
   baseUrl?: string;
+  additionalReferenceInfo?: object;
 }
 
 export class AgentTextChatTransport<
@@ -65,7 +66,12 @@ export class AgentTextChatTransport<
 
       return {
         role: msg.role,
-        content: content,
+        content:
+          msg.role === "user" &&
+          this.agentConfig.additionalReferenceInfo &&
+          Object.keys(this.agentConfig.additionalReferenceInfo).length > 0
+            ? content + JSON.stringify(this.agentConfig.additionalReferenceInfo)
+            : content,
       };
     });
 

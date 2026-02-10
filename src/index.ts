@@ -44,9 +44,6 @@ export * from "./shadcn/input-otp";
 export * from "./shadcn/toggle-group";
 export * from "./shadcn/toggle";
 
-export * from "./vendor/assistant-ui-react";
-export * from "./vendor/assistant-ui-ai-sdk";
-
 export { ActionMenu } from "./ikoncomponents/action-menu";
 export type {
   ActionMenuProps,

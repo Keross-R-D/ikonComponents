@@ -1,6 +1,6 @@
 {
   "name": "ikoncomponents",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "css": "dist/styles.css",
@@ -15,7 +15,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ai-sdk/react": "^3.0.72",
+    "@assistant-ui/react": "^0.12.1",
+    "@assistant-ui/react-ai-sdk": "^1.1.20",
+    "@assistant-ui/react-markdown": "^0.11.10",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.7",

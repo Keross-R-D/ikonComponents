@@ -1,8 +1,8 @@
 "use client";
 
 import { Thread } from "./thread";
-import { AssistantRuntimeProvider } from "../../vendor/assistant-ui-react/src";
-import { useChatRuntime } from "../../vendor/assistant-ui-ai-sdk/src";
+import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { AgentTextChatTransport } from "./agentTextChatTransport";
 
 interface UserData {
@@ -28,6 +28,7 @@ interface AssistantComponentProps {
   maxTokens?: number;
   className?: string;
   baseUrl?: string;
+  additionalReferenceInfo?: object;
   currentUserDetails: UserData;
 }
 
@@ -40,6 +41,7 @@ export const AssistantComponent = ({
   maxTokens = 2048,
   className,
   baseUrl = "http://localhost:3000",
+  additionalReferenceInfo = {},
   currentUserDetails,
 }: AssistantComponentProps) => {
   const runtime = useChatRuntime({
@@ -51,8 +53,11 @@ export const AssistantComponent = ({
       temperature,
       maxTokens,
       baseUrl,
+      additionalReferenceInfo
     }),
   });
+
+  
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <div className={className}>
