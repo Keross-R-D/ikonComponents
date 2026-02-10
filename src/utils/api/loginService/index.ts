@@ -101,6 +101,7 @@ export const updateUserProfile = async ({
     operation: "updateUserProfile",
     arguments_: [userName, userPassword, userPhone, userEmail, userThumbnail],
   });
-  revalidateTag("profile");
+  // revalidateTag("profile");
+  revalidateTag("profile", "default");
   return result.data;
 };
