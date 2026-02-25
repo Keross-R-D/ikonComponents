@@ -1,3 +1,4 @@
+import { getValidAccessToken } from "@/utils/token-management";
 import {
   ChatTransport,
   UIMessage,
@@ -27,6 +28,13 @@ export class AgentTextChatTransport<
   constructor(options: AgentTextChatTransportOptions) {
     this.agentConfig = options;
     this.baseUrl = options.baseUrl || "";
+  }
+
+  updateAgentConfig(options: Partial<AgentTextChatTransportOptions>) {
+    this.agentConfig = {
+      ...this.agentConfig,
+      ...options,
+    };
   }
 
   private getChatId(chatId: string): string {
@@ -88,8 +96,12 @@ export class AgentTextChatTransport<
       ...body,
     };
 
+    //adding code to fetch the token and pass it
+    const accessToken = await getValidAccessToken(this.baseUrl);
+
     const mergedHeaders: Record<string, string> = {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`,
       ...(headers instanceof Headers
         ? Object.fromEntries(headers.entries())
         : headers || {}),

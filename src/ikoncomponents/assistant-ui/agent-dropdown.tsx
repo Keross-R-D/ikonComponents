@@ -48,15 +48,15 @@ export const AgentDropdown = ({
 }: AgentDropdownProps) => {
   const [open, setOpen] = useState(false);
 
-  const displayAgent = selectedAgent || (agents.length > 0 ? agents[0] : null);
-
+  // const displayAgent = selectedAgent || (agents.length > 0 ? agents[0] : null);
+const displayAgent = selectedAgent || null;
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
           className={cn(
-            "gap-2 px-3 py-2 text-sm font-medium",
+            "gap-2 px-3 py-2 text-sm font-medium rounded-2xl",
             triggerClassName
           )}
         >
