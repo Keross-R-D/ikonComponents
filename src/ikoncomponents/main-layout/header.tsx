@@ -1,3 +1,4 @@
+"use client"
 
 import { AppBreadcrumb } from "../app-breadcrumb";
 import * as React from "react"

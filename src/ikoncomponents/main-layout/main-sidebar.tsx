@@ -4,9 +4,7 @@ import * as React from "react";
 import {
   Check,
   CircleUserRound,
-  Clock,
   FolderCode,
-  Heart,
   Home,
   LogOut,
   Settings,

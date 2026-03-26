@@ -6,6 +6,12 @@
       "dom.iterable",
       "esnext"
     ],
+    "paths": {
+      "@assistant-ui/react": ["./src/vendor/assistant-ui-react/src/index.ts"],
+      "@assistant-ui/react-ai-sdk": ["./src/vendor/assistant-ui-ai-sdk/src/index.ts"],
+      "@assistant-ui/react-markdown": ["./src/vendor/assistant-ui-markdown/src/index.ts"],
+      "@/*": ["./src/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
