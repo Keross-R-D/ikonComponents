@@ -1,4 +1,4 @@
-import { getValidAccessToken } from "@/utils/token-management";
+import { getValidAccessToken } from "../../utils/token-management";
 import {
   ChatTransport,
   UIMessage,

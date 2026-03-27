@@ -278,7 +278,7 @@ import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { AgentTextChatTransport } from "./agentTextChatTransport";
 import { useEffect, useMemo, useState } from "react";
-import { getValidAccessToken } from "@/utils/token-management";
+import { getValidAccessToken } from "../../utils/token-management";
 import { Agent } from "./agent-dropdown";
 
 interface UserData {
