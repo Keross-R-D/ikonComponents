@@ -17,11 +17,13 @@ import {
   CollapsibleTrigger
 } from "../../shadcn/collapsible";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SidebarNavItem, useSidebarNav } from "./SidebarNavContext";
 import { set } from "date-fns";
 
 export function NavMain() {
   const { navItems } = useSidebarNav();
+  const pathname = usePathname();
 
   // if (!navItems || navItems.length === 0) {
   //   return null;
@@ -35,12 +37,12 @@ export function NavMain() {
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
+              defaultOpen={item.isActive || item.items.some(sub => pathname.startsWith(sub.url))}
               className="group/collapsible"
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.title}>
+                  <SidebarMenuButton tooltip={item.title} isActive={pathname.startsWith(item.url) || item.items.some(sub => pathname.startsWith(sub.url))}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -50,7 +52,7 @@ export function NavMain() {
                   <SidebarMenuSub>
                     {item.items.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton asChild isActive={pathname === subItem.url || pathname.startsWith(`${subItem.url}/`)}>
                           <Link href={subItem.url}>
                             <span>{subItem.title}</span>
                           </Link>
@@ -63,7 +65,7 @@ export function NavMain() {
             </Collapsible>
           ) : (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title} isActive={pathname === item.url || pathname.startsWith(`${item.url}/`)}>
                 <Link href={item.url} className="flex items-center gap-2 w-full">
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
