@@ -139,8 +139,8 @@ export interface FileUploader2Props {
 /* ----------------------------------------------------
    Main FileUploader2 Component
 ---------------------------------------------------- */
-export const FileUploader2 = forwardRef<FileUploader2Ref, FileUploader2Props>(
-  function FileUploader2(
+export const FileUploaderApi = forwardRef<FileUploader2Ref, FileUploader2Props>(
+  function FileUploaderApi(
   {
   label = "Upload File",
   isDrag = false,
@@ -184,6 +184,7 @@ export const FileUploader2 = forwardRef<FileUploader2Ref, FileUploader2Props>(
           return uploadFilePublic(f);
         })
       );
+      
       onUploadComplete?.(isMultiple ? responses : responses[0]);
     } catch (err) {
       console.error("Upload failed:", err);
@@ -254,12 +255,14 @@ export const FileUploader2 = forwardRef<FileUploader2Ref, FileUploader2Props>(
     previews.length > 0 ? previews : imageUrl ? [imageUrl] : [];
 
   return (
-    <div
-      {...dragHandlers}
-      className={`flex flex-col items-center justify-center gap-2 cursor-pointer text-center px-4 pb-4 border-2 border-dashed rounded-lg transition ${
-        isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"
-      }`}
-    >
+   <div
+  {...dragHandlers}
+  className={`flex flex-col items-center justify-center gap-2 cursor-pointer text-center px-4 pb-4 rounded-lg transition ${
+    fileInput
+      ? ""
+      : `border-2 border-dashed ${isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"}`
+  }`}
+>
       <label className="text-md text-center mt-4 font-bold">{label}</label>
 
       {/* Hidden native file input (used by drag/normal modes) */}
@@ -368,18 +371,19 @@ export const FileUploader2 = forwardRef<FileUploader2Ref, FileUploader2Props>(
       )}
 
       {/* ============ IMAGE PREVIEWS ============ */}
-      {displayPreviews.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-1 justify-center">
-          {displayPreviews.map((src, i) => (
-            <img
-              key={i}
-              src={src}
-              alt={`preview-${i}`}
-              className="h-10 object-cover rounded-md border p-1"
-            />
-          ))}
-        </div>
-      )}
+     {/* ============ IMAGE PREVIEWS ============ */}
+{!fileInput && displayPreviews.length > 0 && (
+  <div className="flex flex-wrap gap-2 mt-1 justify-center">
+    {displayPreviews.map((src, i) => (
+      <img
+        key={i}
+        src={src}
+        alt={`preview-${i}`}
+        className="h-10 object-cover rounded-md border p-1"
+      />
+    ))}
+  </div>
+)}
     </div>
   );
 });
