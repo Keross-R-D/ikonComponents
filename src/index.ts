@@ -74,12 +74,7 @@ export type {
 export { DataTableColumnFilter } from "./ikoncomponents/data-table/datatable-column-filter";
 export { DataTableFacetedFilter } from "./ikoncomponents/data-table/datatable-faceted-filter";
 export { DataTableFilterMenu } from "./ikoncomponents/data-table/datatable-filter-menu";
-export {
-  convertFileToObject,
-  FileUploader,
-  getImageFromObject,
-} from "./ikoncomponents/fileUpload";
-export type { FileUploaderProps } from "./ikoncomponents/fileUpload";
+
 export { DataTablePagination } from "./ikoncomponents/data-table/datatable-pagination";
 export { DataTableToolbar } from "./ikoncomponents/data-table/datatable-toolbar";
 export { getDataTableColumnTitle } from "./ikoncomponents/data-table/function";
@@ -240,3 +235,17 @@ export type { TokenResponse } from "./utils/token-management/types";
 
 export { useIsMobile } from "./hooks/use-mobile";
 export {useRefresh} from "./ikoncomponents/main-layout/RefreshContext";
+export {FileUploaderApi} from "./ikoncomponents/fileUploadApi";
+export type {FileUploader2Ref,FileUploader2Props} from "./ikoncomponents/fileUploadApi";
+export {fetchFileAsBase64} from "./utils/api/file-upload copy/index";
+export {downloadFileByResourceId} from "./utils/api/file-upload copy/index";
+export {fetchImagePreview} from "./utils/api/file-upload copy/index";
+
+
+export {convertFileToObject} from "./ikoncomponents/fileUpload";
+export {getFileUrlFromObject} from "./ikoncomponents/fileUpload";
+export { default as FileUploader } from "./ikoncomponents/fileUpload";
+
+
+
+
