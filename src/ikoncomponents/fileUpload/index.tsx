@@ -220,15 +220,20 @@ export default function FileUploader({
   return (
     <div
       {...dragHandlers}
-      className={`flex flex-col items-center justify-center gap-2 cursor-pointer text-center px-4 pb-4 rounded-lg transition ${
-        fileInput
-          ? ""
-          : `border-2 border-dashed ${
-              isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"
-            }`
-      }`}
+      className={`flex flex-col ${
+  fileInput ? "items-start text-left" : "items-center text-center"
+} justify-center gap-2 cursor-pointer px-4 pb-4 rounded-lg transition ${
+  fileInput
+    ? ""
+    : `border-2 border-dashed ${
+        isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"
+      }`
+}`}
     >
-      <label className="text-md text-center mt-4 font-bold">{label}</label>
+      {/* {fileInput?<label className="text-md font-bold">{label}</label>:<label className="text-md text-center  font-bold">{label}</label>} */}
+
+           <label className="text-md mt-4 font-bold">{label}</label>
+
 
       {/* ---------------- FILE INPUT MODE ---------------- */}
       {fileInput && (

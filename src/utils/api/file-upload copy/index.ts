@@ -30,7 +30,7 @@ export const uploadFilePublic = async (file: File) => {
   const data = await response.json();
   if (data.files && data.files.length > 0) {
     //just return the 1st resourceId
-    return data.files[0].resourceId;
+    return data;
   }
   throw new Error("No files returned from upload");
 };
