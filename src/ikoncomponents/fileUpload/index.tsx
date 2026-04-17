@@ -17,12 +17,16 @@ export const convertFileToObject = (file: File): Promise<any> =>
       const result = reader.result as string;
       const base64 = result.split(",")[1];
 
+      const nameParts = file.name.split(".");
+      const ext = nameParts.length >= 2 ? nameParts.pop()?.toLowerCase() : "";
+      const fileType = file.type || (ext ? `${ext}` : "application/octet-stream");
+
       resolve({
         resourceId: uuidv4(),
         message: "File processed successfully",
         fileName: file.name,
         fileSize: file.size,
-        fileType: file.type,
+        fileType, // ✅ FIXED
         base64,
       });
     };

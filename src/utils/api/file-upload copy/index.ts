@@ -91,3 +91,94 @@ export const fileUpload = async (
   }
 };
 
+export const downloadFileByResourceId = async (resourceId: string) => {
+  const accessToken = await getValidAccessToken(IKON_BASE_API_URL || "");
+
+  const response = await fetch(
+    `${IKON_BASE_API_URL}/platform/file-resource/download/public/${resourceId}`,
+    {
+      method: "GET",
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to download file");
+  }
+
+  
+  const blob = await response.blob();
+
+
+  const contentDisposition = response.headers.get("Content-Disposition");
+
+  let fileName = "downloaded-file";
+  if (contentDisposition) {
+    const match = contentDisposition.match(/filename="(.+)"/);
+    if (match) fileName = match[1];
+  }
+
+ 
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName; 
+  document.body.appendChild(a);
+  a.click();
+
+  // cleanup
+  a.remove();
+  window.URL.revokeObjectURL(url);
+};
+
+export const fetchFileAsBase64 = async (resourceId: string) => {
+  const accessToken = await getValidAccessToken(IKON_BASE_API_URL || "");
+
+  const response = await fetch(
+    `${IKON_BASE_API_URL}/platform/file-resource/download/public/${resourceId}`,
+    {
+      method: "GET",
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch file");
+  }
+
+  const blob = await response.blob();
+
+  // ✅ Convert blob → base64
+  const base64 = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      const base64String = result.split(",")[1]; // remove data:*/*;base64,
+      resolve(base64String);
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+
+  // ✅ Extract filename (if available)
+  const contentDisposition = response.headers.get("Content-Disposition");
+
+  let fileName = "unknown";
+  if (contentDisposition) {
+    const match = contentDisposition.match(/filename="(.+)"/);
+    if (match) fileName = match[1];
+  }
+
+  return {
+    base64,
+    fileSize: blob.size,
+    fileType: blob.type,
+  };
+};
