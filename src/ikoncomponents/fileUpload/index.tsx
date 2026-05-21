@@ -3,7 +3,7 @@
 import React, { useState, DragEvent, useRef } from "react";
 import { UploadCloud, FileUp, Upload, X } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { Input } from "@/shadcn/input";
+import { Input } from "../../shadcn/input";
 import { IconButtonWithTooltip } from "../buttons";
 
 /* ----------------------------------------------------

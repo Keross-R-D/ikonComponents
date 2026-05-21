@@ -1,4 +1,4 @@
-import { getValidAccessToken } from "@/utils/token-management";
+import { getValidAccessToken } from "../../token-management";
 
 
 
@@ -108,7 +108,7 @@ export const downloadFileByResourceId = async (resourceId: string) => {
     throw new Error("Failed to download file");
   }
 
-  
+
   const blob = await response.blob();
 
 
@@ -120,12 +120,12 @@ export const downloadFileByResourceId = async (resourceId: string) => {
     if (match) fileName = match[1];
   }
 
- 
+
   const url = window.URL.createObjectURL(blob);
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = fileName; 
+  a.download = fileName;
   document.body.appendChild(a);
   a.click();
 

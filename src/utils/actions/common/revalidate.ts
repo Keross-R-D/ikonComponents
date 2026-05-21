@@ -6,7 +6,7 @@ import { RevalidateProps } from "./type";
 export async function revalidateData({ paths, tags }: RevalidateProps) {
     if (tags) {
         for (const tag of tags) {
-            revalidateTag(tag)
+            revalidateTag(tag, 'all')
         }
     }
 

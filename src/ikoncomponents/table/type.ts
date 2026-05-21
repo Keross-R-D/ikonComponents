@@ -13,6 +13,12 @@ export interface DataTableLayoutProps<T> {
   gridComponent?: (data: T[]) => React.ReactNode;
   isLoading?: boolean;
   onReload?: () => void;
+  themeColor?: string;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  /** Called with the applied filter map whenever the user applies or resets filters.
+   *  Use this to trigger a backend API call with the new filters. */
+  onFilterChange?: (filters: Record<string, string[]>) => void;
 }
 
 
@@ -27,4 +33,6 @@ export interface DataTableProps<T> {
   columns: ColumnDef<T>[];
   keyExtractor: (row: T) => string | number;
   onRowClick?: (row: T) => void;
+  groupedColumns?: string[];
+  onToggleGroup?: (columnHeader: string) => void;
 }

@@ -1,5 +1,5 @@
 {
-   "compilerOptions": {
+  "compilerOptions": {
     "target": "ES2017",
     "lib": [
       "dom",
@@ -7,10 +7,18 @@
       "esnext"
     ],
     "paths": {
-      "@assistant-ui/react": ["./src/vendor/assistant-ui-react/src/index.ts"],
-      "@assistant-ui/react-ai-sdk": ["./src/vendor/assistant-ui-ai-sdk/src/index.ts"],
-      "@assistant-ui/react-markdown": ["./src/vendor/assistant-ui-markdown/src/index.ts"],
-      "@/*": ["./src/*"]
+      "@assistant-ui/react": [
+        "./src/vendor/assistant-ui-react/src/index.ts"
+      ],
+      "@assistant-ui/react-ai-sdk": [
+        "./src/vendor/assistant-ui-ai-sdk/src/index.ts"
+      ],
+      "@assistant-ui/react-markdown": [
+        "./src/vendor/assistant-ui-markdown/src/index.ts"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -23,14 +31,25 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx", 
-    "outDir": "dist", 
-    "declaration": true
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "declaration": true,
+    "noEmit": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "src/index.ts",
     "src/styles.css",
-    "src/ikoncomponents/big-calender/index.css"
+    "src/ikoncomponents/big-calender/index.css",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

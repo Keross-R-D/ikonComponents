@@ -1,65 +1,172 @@
-import Image from "next/image";
+"use client";
+
+import React, { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { DataTableLayout } from "../src/ikoncomponents/table";
+import { ActionMenu } from "../src/ikoncomponents/action-menu";
+import { ColumnDef } from "../src/ikoncomponents/table/type";
+import { Button } from "../src/shadcn/button";
+import { Badge } from "../src/shadcn/badge";
+import { Trash, Plus, Mail, UserCheck, Shield, Download } from "lucide-react";
+
+// --- Mock Components ---
+
+const IconTextButtonWithTooltip = ({ children, tooltipContent, onClick, ...props }: any) => (
+  <Button onClick={onClick} {...props} title={tooltipContent} variant="outline" className="gap-2">
+    {children}
+  </Button>
+);
+
+const LeadModal = ({ isOpen, onClose, onSuccess }: any) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-background p-6 rounded-lg shadow-xl border max-w-md w-full">
+        <h2 className="text-xl font-bold mb-4">Add New Lead</h2>
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={() => { alert("Lead Created!"); onSuccess(); onClose(); }}>Create</Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Mock Data ---
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: "Admin" | "Editor" | "User";
+  status: "Active" | "Inactive";
+  department: "Sales" | "Engineering" | "HR";
+}
+
+const MOCK_DATA: User[] = [
+  { id: "1", name: "Anushri Dutta", email: "anushri@example.com", role: "Admin", status: "Active", department: "Engineering" },
+  { id: "2", name: "John Doe", email: "john@example.com", role: "User", status: "Inactive", department: "Sales" },
+  { id: "3", name: "Jane Smith", email: "jane@example.com", role: "Editor", status: "Active", department: "Engineering" },
+  { id: "4", name: "Alice Brown", email: "alice@example.com", role: "User", status: "Active", department: "HR" },
+  { id: "5", name: "Bob Wilson", email: "bob@example.com", role: "User", status: "Inactive", department: "Sales" },
+  { id: "6", name: "Charlie Davis", email: "charlie@example.com", role: "Editor", status: "Active", department: "Sales" },
+];
+
+function TableDemo() {
+  const searchParams = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1");
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const columns: ColumnDef<User>[] = [
+    { header: "Name", accessorKey: "name" },
+    { header: "Email", accessorKey: "email" },
+    { header: "Role", accessorKey: "role" },
+    { header: "Department", accessorKey: "department" },
+    {
+      header: "Status",
+      cell: (row: User) => (
+        <Badge variant={row.status === "Active" ? "default" : "secondary"}>
+          {row.status}
+        </Badge>
+      )
+    },
+    {
+      header: "Actions",
+      cell: (row: User) => (
+        <div className="flex justify-center">
+          <ActionMenu
+            actionMenus={[
+              { label: "Edit", icon: UserCheck, onClick: () => alert(`Editing ${row.name}`) },
+              { label: "Delete", icon: Trash, onClick: () => alert(`Deleting ${row.name}`) }
+            ]}
+          />
+        </div>
+      )
+    },
+  ];
+
+  const headerActions = (
+    <div className="flex items-center gap-2">
+      <IconTextButtonWithTooltip
+        tooltipContent="Add new lead"
+        onClick={() => setModalOpen(true)}
+      >
+        <Plus className="w-4 h-4" />
+        Add Lead
+      </IconTextButtonWithTooltip>
+
+      <LeadModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onSuccess={() => console.log("Refresh data")}
+      />
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-extrabold tracking-tight">DataTable Features Showcase</h1>
+          <p className="text-muted-foreground text-lg">A powerful, flexible table with grouping, filtering, and export capabilities.</p>
+        </div>
+
+        <div className="bg-card rounded-xl border p-6 shadow-lg">
+          <DataTableLayout
+            data={MOCK_DATA}
+            columns={columns}
+            keyExtractor={(row) => row.id}
+            totalPages={1}
+            currentPage={page}
+            themeColor="#6366f1" // Custom indigo color
+            actionNode={headerActions}
+            onRowClick={(row: User) => console.log("Row Clicked:", row)}
+            gridComponent={(data: User[]) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data.map(user => (
+                  <div key={user.id} className="p-4 border rounded-lg bg-card shadow-sm hover:border-primary transition-colors">
+                    <h3 className="font-bold text-lg">{user.name}</h3>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <div className="mt-4 flex justify-between items-center border-t pt-2">
+                      <Badge variant="outline">{user.role}</Badge>
+                      <span className="text-xs text-muted-foreground">{user.department}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-5 bg-primary/5 rounded-xl border border-primary/10">
+            <h4 className="font-bold mb-2 flex items-center gap-2 text-primary">
+              <Shield className="w-4 h-4" /> Grouping
+            </h4>
+            <p className="text-sm text-muted-foreground">Drag the handle (⋮⋮) on column headers to the grouping zone above the table.</p>
+          </div>
+          <div className="p-5 bg-green-500/5 rounded-xl border border-green-500/10">
+            <h4 className="font-bold mb-2 flex items-center gap-2 text-green-600">
+              <Mail className="w-4 h-4" /> Filtering
+            </h4>
+            <p className="text-sm text-muted-foreground">Use the <b>Table Filter</b> to search specific columns or the global search for everything.</p>
+          </div>
+          <div className="p-5 bg-blue-500/5 rounded-xl border border-blue-500/10">
+            <h4 className="font-bold mb-2 flex items-center gap-2 text-blue-600">
+              <Download className="w-4 h-4" /> Export
+            </h4>
+            <p className="text-sm text-muted-foreground">Click <b>Export</b> to download your currently filtered data as a CSV file.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <TableDemo />
+    </Suspense>
   );
 }

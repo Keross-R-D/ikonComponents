@@ -1,6 +1,6 @@
 {
   "name": "ikoncomponents",
-  "version": "1.6.5",
+  "version": "1.7.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "css": "dist/styles.css",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "npm run build:js && npm run build:css",
-    "build:js": "tsc -p tsconfig.json",
+    "build:js": "tsc -p tsconfig.build.json",
     "build:css": "postcss src/styles.css -o dist/styles.css --config postcss.config.mjs --minify",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run build"
@@ -74,6 +74,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "tap": "^21.5.0",
+    "use-debounce": "^10.1.1",
     "uuid": "^13.0.0",
     "vaul": "^1.1.2",
     "zod": "^4.3.6",

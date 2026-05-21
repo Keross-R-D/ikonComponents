@@ -3,7 +3,7 @@
 import React, { useState, DragEvent, useRef, useImperativeHandle, forwardRef } from "react";
 import { UploadCloud, FileUp, Upload } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { Input } from "@/shadcn/input";
+import { Input } from "../../shadcn/input";
 import { IconButtonWithTooltip } from "../buttons";
 import { uploadFilePublic } from "../../utils/api/file-upload copy";
 
@@ -79,8 +79,8 @@ function FileInputUI({
           filesCount === 0
             ? ""
             : filesCount === 1
-            ? fileNames
-            : `${filesCount} files selected`
+              ? fileNames
+              : `${filesCount} files selected`
         }
         readOnly
       />
@@ -141,100 +141,100 @@ export interface FileUploader2Props {
 ---------------------------------------------------- */
 export const FileUploaderApi = forwardRef<FileUploader2Ref, FileUploader2Props>(
   function FileUploaderApi(
-  {
-  label = "Upload File",
-  isDrag = false,
-  onUploadComplete,
-  imageUrl,
-  fileInput = false,
-  isMultiple = false,
-  tooltipContent,
-  fileNamePlaceholder = "Choose files...",
-  onFileSelect,
-  apiUrl,
-  manual = false,
-}: FileUploader2Props, ref) {
-  const [isDragging, setIsDragging] = useState(false);
-  const [previews, setPreviews] = useState<string[]>([]);
-  const [fileNames, setFileNames] = useState("");
-  const [loading, setLoading] = useState(false);
+    {
+      label = "Upload File",
+      isDrag = false,
+      onUploadComplete,
+      imageUrl,
+      fileInput = false,
+      isMultiple = false,
+      tooltipContent,
+      fileNamePlaceholder = "Choose files...",
+      onFileSelect,
+      apiUrl,
+      manual = false,
+    }: FileUploader2Props, ref) {
+    const [isDragging, setIsDragging] = useState(false);
+    const [previews, setPreviews] = useState<string[]>([]);
+    const [fileNames, setFileNames] = useState("");
+    const [loading, setLoading] = useState(false);
 
-  // Holds files pending upload when manual=true
-  const pendingFilesRef = useRef<File[]>([]);
+    // Holds files pending upload when manual=true
+    const pendingFilesRef = useRef<File[]>([]);
 
-  const inputId = `fileInput-${label.replace(/\s+/g, "-").toLowerCase()}`;
-  const filesCount = fileNames ? fileNames.split(", ").length : 0;
+    const inputId = `fileInput-${label.replace(/\s+/g, "-").toLowerCase()}`;
+    const filesCount = fileNames ? fileNames.split(", ").length : 0;
 
-  /* ------------ UPLOAD EXECUTOR ------------ */
-  const executeUpload = async (fileList: File[]) => {
-    try {
-      setLoading(true);
-      const responses = await Promise.all(
-        fileList.map((f) => {
-          if (apiUrl) {
-            const formData = new FormData();
-            formData.append("file", f);
-            return fetch(apiUrl, { method: "POST", body: formData })
-              .then((res) => {
-                if (!res.ok) throw new Error(`Upload failed: ${res.statusText}`);
-                return res.json();
-              })
-              .then((data) => data);
-          }
-          return uploadFilePublic(f);
-        })
-      );
-      
-      onUploadComplete?.(isMultiple ? responses : responses[0]);
-    } catch (err) {
-      console.error("Upload failed:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    /* ------------ UPLOAD EXECUTOR ------------ */
+    const executeUpload = async (fileList: File[]) => {
+      try {
+        setLoading(true);
+        const responses = await Promise.all(
+          fileList.map((f) => {
+            if (apiUrl) {
+              const formData = new FormData();
+              formData.append("file", f);
+              return fetch(apiUrl, { method: "POST", body: formData })
+                .then((res) => {
+                  if (!res.ok) throw new Error(`Upload failed: ${res.statusText}`);
+                  return res.json();
+                })
+                .then((data) => data);
+            }
+            return uploadFilePublic(f);
+          })
+        );
 
-  /* ------------ EXPOSE upload() TO PARENT ------------ */
-  useImperativeHandle(ref, () => ({
-    upload: async () => {
-      if (!pendingFilesRef.current.length) {
-        console.warn("FileUploader2: no files selected to upload.");
-        return;
+        onUploadComplete?.(isMultiple ? responses : responses[0]);
+      } catch (err) {
+        console.error("Upload failed:", err);
+      } finally {
+        setLoading(false);
       }
-      await executeUpload(pendingFilesRef.current);
-    },
-  }));
+    };
 
-  /* ------------ CORE FILE HANDLER ------------ */
-  const handleFiles = async (files: File[]) => {
-    const fileList = isMultiple ? files : [files[0]];
+    /* ------------ EXPOSE upload() TO PARENT ------------ */
+    useImperativeHandle(ref, () => ({
+      upload: async () => {
+        if (!pendingFilesRef.current.length) {
+          console.warn("FileUploader2: no files selected to upload.");
+          return;
+        }
+        await executeUpload(pendingFilesRef.current);
+      },
+    }));
 
-    // Local previews for images
-    const newPreviews = fileList.map((f) =>
-      f.type.startsWith("image/") ? URL.createObjectURL(f) : ""
-    );
-    setPreviews(newPreviews.filter(Boolean));
-    setFileNames(fileList.map((f) => f.name).join(", "));
+    /* ------------ CORE FILE HANDLER ------------ */
+    const handleFiles = async (files: File[]) => {
+      const fileList = isMultiple ? files : [files[0]];
 
-    // Notify parent of raw files
-    onFileSelect?.(fileList);
+      // Local previews for images
+      const newPreviews = fileList.map((f) =>
+        f.type.startsWith("image/") ? URL.createObjectURL(f) : ""
+      );
+      setPreviews(newPreviews.filter(Boolean));
+      setFileNames(fileList.map((f) => f.name).join(", "));
 
-    if (manual) {
-      // Store files for later — upload() will consume them
-      pendingFilesRef.current = fileList;
-    } else {
-      await executeUpload(fileList);
-    }
-  };
+      // Notify parent of raw files
+      onFileSelect?.(fileList);
 
-  /* ------------ INPUT CHANGE ------------ */
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files?.length) handleFiles(Array.from(files));
-  };
+      if (manual) {
+        // Store files for later — upload() will consume them
+        pendingFilesRef.current = fileList;
+      } else {
+        await executeUpload(fileList);
+      }
+    };
 
-  /* ------------ DRAG HANDLERS ------------ */
-  const dragHandlers = isDrag
-    ? {
+    /* ------------ INPUT CHANGE ------------ */
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files?.length) handleFiles(Array.from(files));
+    };
+
+    /* ------------ DRAG HANDLERS ------------ */
+    const dragHandlers = isDrag
+      ? {
         onDragOver: (e: DragEvent<HTMLDivElement>) => {
           e.preventDefault();
           setIsDragging(true);
@@ -248,149 +248,146 @@ export const FileUploaderApi = forwardRef<FileUploader2Ref, FileUploader2Props>(
           }
         },
       }
-    : {};
+      : {};
 
-  /* ------------ DISPLAY PREVIEWS ------------ */
-  const displayPreviews =
-    previews.length > 0 ? previews : imageUrl ? [imageUrl] : [];
+    /* ------------ DISPLAY PREVIEWS ------------ */
+    const displayPreviews =
+      previews.length > 0 ? previews : imageUrl ? [imageUrl] : [];
 
-  return (
-   <div
-  {...dragHandlers}
-  className={`flex flex-col ${
-  fileInput ? "items-start text-left" : "items-center text-center"
-} justify-center gap-2 cursor-pointer px-4 pb-4 rounded-lg transition ${
-  fileInput
-    ? ""
-    : `border-2 border-dashed ${
-        isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"
-      }`
-}`}
->
-      <label className="text-md mt-4 font-bold">{label}</label>
+    return (
+      <div
+        {...dragHandlers}
+        className={`flex flex-col ${fileInput ? "items-start text-left" : "items-center text-center"
+          } justify-center gap-2 cursor-pointer px-4 pb-4 rounded-lg transition ${fileInput
+            ? ""
+            : `border-2 border-dashed ${isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"
+            }`
+          }`}
+      >
+        <label className="text-md mt-4 font-bold">{label}</label>
 
-      {/* Hidden native file input (used by drag/normal modes) */}
-      <input
-        type="file"
-        id={inputId}
-        className="hidden"
-        multiple={isMultiple}
-        onChange={handleInputChange}
-      />
+        {/* Hidden native file input (used by drag/normal modes) */}
+        <input
+          type="file"
+          id={inputId}
+          className="hidden"
+          multiple={isMultiple}
+          onChange={handleInputChange}
+        />
 
-      {/* ============ FILE INPUT MODE ============ */}
-      {fileInput && (
-        <>
-          <FileInputUI
-            fileNames={fileNames}
-            fileNamePlaceholder={fileNamePlaceholder}
-            tooltipContent={tooltipContent}
-            onFileNamesChange={setFileNames}
-            onFileSelect={(files) => handleFiles(files)}
-            isMultiple={isMultiple}
-            inputId={`${inputId}-fileinput`}
-          />
+        {/* ============ FILE INPUT MODE ============ */}
+        {fileInput && (
+          <>
+            <FileInputUI
+              fileNames={fileNames}
+              fileNamePlaceholder={fileNamePlaceholder}
+              tooltipContent={tooltipContent}
+              onFileNamesChange={setFileNames}
+              onFileSelect={(files) => handleFiles(files)}
+              isMultiple={isMultiple}
+              inputId={`${inputId}-fileinput`}
+            />
 
-          {/* Drag hint when isDrag is also enabled */}
-          {isDrag && (
-            <p className="text-sm text-gray-500">
-              {isDragging ? "Drop files here..." : "or drag & drop files here"}
-            </p>
-          )}
+            {/* Drag hint when isDrag is also enabled */}
+            {isDrag && (
+              <p className="text-sm text-gray-500">
+                {isDragging ? "Drop files here..." : "or drag & drop files here"}
+              </p>
+            )}
 
-          {/* Show loading state */}
-          {loading && (
-            <p className="text-sm text-blue-500 animate-pulse">Uploading...</p>
-          )}
+            {/* Show loading state */}
+            {loading && (
+              <p className="text-sm text-blue-500 animate-pulse">Uploading...</p>
+            )}
 
-          {/* Show selected file count if multiple files were dropped */}
-          {filesCount > 1 && !loading && (
-            <p className="text-sm font-medium">{filesCount} files selected</p>
-          )}
-        </>
-      )}
+            {/* Show selected file count if multiple files were dropped */}
+            {filesCount > 1 && !loading && (
+              <p className="text-sm font-medium">{filesCount} files selected</p>
+            )}
+          </>
+        )}
 
-      {/* ============ DRAG / NORMAL MODE ============ */}
-      {!fileInput && (
-        <>
-          {isDrag ? (
-            <div
-              className="mt-3 p-6 w-full text-center cursor-pointer"
-              onClick={() => document.getElementById(inputId)?.click()}
-            >
-              {filesCount === 0 && !loading && (
-                <div className="flex flex-col items-center gap-3">
-                  <UploadCloud className="w-10 h-10 text-blue-600" />
-                  <p className="text-gray-600">
-                    Drag & drop {isMultiple ? "files" : "a file"} or{" "}
-                    <span className="text-blue-600 underline">browse</span>
+        {/* ============ DRAG / NORMAL MODE ============ */}
+        {!fileInput && (
+          <>
+            {isDrag ? (
+              <div
+                className="mt-3 p-6 w-full text-center cursor-pointer"
+                onClick={() => document.getElementById(inputId)?.click()}
+              >
+                {filesCount === 0 && !loading && (
+                  <div className="flex flex-col items-center gap-3">
+                    <UploadCloud className="w-10 h-10 text-blue-600" />
+                    <p className="text-gray-600">
+                      Drag & drop {isMultiple ? "files" : "a file"} or{" "}
+                      <span className="text-blue-600 underline">browse</span>
+                    </p>
+                  </div>
+                )}
+
+                {loading && (
+                  <p className="text-sm text-blue-500 animate-pulse">
+                    Uploading...
                   </p>
-                </div>
-              )}
+                )}
 
-              {loading && (
-                <p className="text-sm text-blue-500 animate-pulse">
-                  Uploading...
-                </p>
-              )}
+                {filesCount > 0 && !loading && (
+                  <p className="mt-3 text-sm font-medium">
+                    {filesCount === 1
+                      ? fileNames
+                      : `${filesCount} files selected`}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div
+                className="border rounded-lg p-4 flex flex-col items-center gap-2 cursor-pointer text-center"
+                onClick={() => document.getElementById(inputId)?.click()}
+              >
+                {filesCount === 0 && !loading && (
+                  <>
+                    <FileUp className="w-8 h-8 text-blue-600" />
+                    <span className="text-blue-600 underline">
+                      {isMultiple ? "Browse Files" : "Browse File"}
+                    </span>
+                  </>
+                )}
 
-              {filesCount > 0 && !loading && (
-                <p className="mt-3 text-sm font-medium">
-                  {filesCount === 1
-                    ? fileNames
-                    : `${filesCount} files selected`}
-                </p>
-              )}
-            </div>
-          ) : (
-            <div
-              className="border rounded-lg p-4 flex flex-col items-center gap-2 cursor-pointer text-center"
-              onClick={() => document.getElementById(inputId)?.click()}
-            >
-              {filesCount === 0 && !loading && (
-                <>
-                  <FileUp className="w-8 h-8 text-blue-600" />
-                  <span className="text-blue-600 underline">
-                    {isMultiple ? "Browse Files" : "Browse File"}
-                  </span>
-                </>
-              )}
+                {loading && (
+                  <p className="text-sm text-blue-500 animate-pulse">
+                    Uploading...
+                  </p>
+                )}
 
-              {loading && (
-                <p className="text-sm text-blue-500 animate-pulse">
-                  Uploading...
-                </p>
-              )}
+                {filesCount > 0 && !loading && (
+                  <p className="text-sm font-medium">
+                    {filesCount === 1
+                      ? fileNames
+                      : `${filesCount} files selected`}
+                  </p>
+                )}
+              </div>
+            )}
+          </>
+        )}
 
-              {filesCount > 0 && !loading && (
-                <p className="text-sm font-medium">
-                  {filesCount === 1
-                    ? fileNames
-                    : `${filesCount} files selected`}
-                </p>
-              )}
-            </div>
-          )}
-        </>
-      )}
-
-      {/* ============ IMAGE PREVIEWS ============ */}
-     {/* ============ IMAGE PREVIEWS ============ */}
-{!fileInput && displayPreviews.length > 0 && (
-  <div className="flex flex-wrap gap-2 mt-1 justify-center">
-    {displayPreviews.map((src, i) => (
-      <img
-        key={i}
-        src={src}
-        alt={`preview-${i}`}
-        className="h-10 object-cover rounded-md border p-1"
-      />
-    ))}
-  </div>
-)}
-    </div>
-  );
-});
+        {/* ============ IMAGE PREVIEWS ============ */}
+        {/* ============ IMAGE PREVIEWS ============ */}
+        {!fileInput && displayPreviews.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-1 justify-center">
+            {displayPreviews.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`preview-${i}`}
+                className="h-10 object-cover rounded-md border p-1"
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  });
 
 /* ----------------------------------------------------
    Convert Base64 back to Blob URL (utility, kept for compat)
