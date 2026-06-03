@@ -64,7 +64,7 @@ export function DataTable<T>({
         const isExpanded = expandedGroups.has(item.id);
         return (
           <React.Fragment key={item.id}>
-            <TableRow 
+            <TableRow
               className="bg-muted/40 hover:bg-muted/60 cursor-pointer border-l-4 border-l-primary/50"
               onClick={() => toggleGroup(item.id)}
             >
@@ -114,13 +114,13 @@ export function DataTable<T>({
             {columns.map((col, index) => {
               const headerText = typeof col.header === "string" ? col.header : "";
               return (
-                <TableHead 
-                  key={index} 
+                <TableHead
+                  key={index}
                   className="font-semibold text-muted-foreground group relative"
                 >
                   <div className="flex items-center gap-2">
                     {headerText && (
-                      <div 
+                      <div
                         className="cursor-grab active:cursor-grabbing p-1 hover:bg-background/50 rounded transition-colors"
                         draggable
                         onDragStart={(e) => {

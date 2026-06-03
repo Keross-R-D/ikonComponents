@@ -1,25 +1,23 @@
 
 
-export interface DataTableLayoutProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
-  keyExtractor: (row: T) => string | number;
-  totalPages: number;
-  currentPage: number;
+// export interface DataTableLayoutProps<T> {
+//   data: T[];
+//   columns: ColumnDef<T>[];
+//   keyExtractor: (row: T) => string | number;
+//   totalPages: number;
+//   currentPage: number;
 
-  filterComponent?: React.ReactNode;
-  actionNode?: React.ReactNode;
-  onRowClick?: (row: T) => void;
-  gridComponent?: (data: T[]) => React.ReactNode;
-  isLoading?: boolean;
-  onReload?: () => void;
-  themeColor?: string;
-  onLoadMore?: () => void;
-  hasMore?: boolean;
-  /** Called with the applied filter map whenever the user applies or resets filters.
-   *  Use this to trigger a backend API call with the new filters. */
-  onFilterChange?: (filters: Record<string, string[]>) => void;
-}
+//   filterComponent?: React.ReactNode;
+//   actionNode?: React.ReactNode;
+//   onRowClick?: (row: T) => void;
+//   gridComponent?: (data: T[]) => React.ReactNode;
+//   isLoading?: boolean;
+//   onReload?: () => void;
+//   themeColor?: string;
+//   onLoadMore?: () => void;
+//   hasMore?: boolean;
+//   onFilterChange?: (filters: Record<string, string[]>) => void;
+// }
 
 
 export interface ColumnDef<T> {
@@ -36,3 +34,27 @@ export interface DataTableProps<T> {
   groupedColumns?: string[];
   onToggleGroup?: (columnHeader: string) => void;
 }
+
+export interface DataTableLayoutProps<T> {
+  data: T[];
+  columns: ColumnDef<T>[];
+  extraTools?: ExtraPrams<T>;
+
+};
+
+export type ExtraPrams<T> = {
+  keyExtractor: (row: T) => string | number;
+  totalPages: number;
+  currentPage: number;
+
+  filterComponent?: React.ReactNode;
+  actionNode?: React.ReactNode;
+  onRowClick?: (row: T) => void;
+  gridComponent?: (data: T[]) => React.ReactNode;
+  isLoading?: boolean;
+  onReload?: () => void;
+  themeColor?: string;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  onFilterChange?: (filters: Record<string, string[]>) => void;
+};

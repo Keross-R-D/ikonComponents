@@ -18,20 +18,25 @@ import {
 export function DataTableLayout<T>({
   data,
   columns,
-  keyExtractor,
-  totalPages,
-  currentPage,
-  filterComponent,
-  actionNode,
-  onRowClick,
-  gridComponent,
-  isLoading = false,
-  onReload,
-  themeColor = "hsl(var(--primary))",
-  onLoadMore,
-  hasMore = false,
-  onFilterChange,
+  extraTools,
 }: DataTableLayoutProps<T>) {
+
+  const {
+    keyExtractor,
+    totalPages,
+    currentPage,
+    filterComponent,
+    actionNode,
+    onRowClick,
+    gridComponent,
+    isLoading,
+    onReload,
+    themeColor,
+    onLoadMore,
+    hasMore,
+    onFilterChange,
+  } = extraTools ?? {};
+
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -476,7 +481,7 @@ export function DataTableLayout<T>({
       {/* Table Content */}
       <div className="relative min-h-[300px] mt-2">
         <Reload
-          isLoading={isLoading}
+          isLoading={isLoading ?? false}
           onReload={onReload || (() => window.location.reload())}
         />
 
@@ -487,7 +492,7 @@ export function DataTableLayout<T>({
               columns={columns.filter(col =>
                 typeof col.header === "string" ? visibleColumns.includes(col.header) : true
               )}
-              keyExtractor={keyExtractor}
+              keyExtractor={keyExtractor ?? (() => "")}
               onRowClick={onRowClick}
               groupedColumns={groupedColumns}
               onToggleGroup={handleToggleGroup}
@@ -513,8 +518,8 @@ export function DataTableLayout<T>({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border mt-4">
           <DataTablePageSize />
           <DataTablePagination
-            totalPages={totalPages}
-            currentPage={currentPage}
+            totalPages={totalPages ?? 0}
+            currentPage={currentPage ?? 0}
           />
         </div>
       )}
