@@ -57,4 +57,5 @@ export type ExtraPrams<T> = {
   onLoadMore?: () => void;
   hasMore?: boolean;
   onFilterChange?: (filters: Record<string, string[]>) => void;
+  unfilteredData?: T[];
 };

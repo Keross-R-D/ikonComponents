@@ -116,12 +116,18 @@ function TableDemo() {
   const search = searchParams.get("search") || "";
 
   const [gridLimit, setGridLimit] = useState(12);
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+  const [activeFilters, setActiveFilters] = useState<Record<string, any[]>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, [page, search, activeFilters]);
 
   const handleReload = () => {
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1200);
+    setTimeout(() => setIsLoading(false), 800);
   };
 
   const handleLoadMore = () => {
@@ -139,7 +145,11 @@ function TableDemo() {
 
     const matchesFilters = Object.entries(activeFilters).every(([field, values]) => {
       if (!values || values.length === 0) return true;
-      return values.includes((user as any)[field] ?? "");
+      const col = columns.find((c) => c.header === field);
+      const accessor = col?.accessorKey;
+      if (!accessor) return true;
+      const userValue = String((user as any)[accessor] || "");
+      return values.includes(userValue);
     });
 
     return matchesSearch && matchesFilters;
@@ -230,6 +240,7 @@ function TableDemo() {
               onFilterChange: (filters) => {
                 setActiveFilters(filters);
               },
+              unfilteredData: MOCK_DATA,
               onRowClick: (row) => console.log("Row clicked:", row),
               gridComponent,
             }}

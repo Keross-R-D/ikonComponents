@@ -1,6 +1,6 @@
 {
   "name": "ikoncomponents",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "css": "dist/styles.css",
@@ -8,6 +8,7 @@
     "dist"
   ],
   "scripts": {
+    "dev": "next dev",
     "build": "npm run build:js && npm run build:css",
     "build:js": "tsc -p tsconfig.build.json",
     "build:css": "postcss src/styles.css -o dist/styles.css --config postcss.config.mjs --minify",

@@ -55,7 +55,16 @@ const MOCK_DATA: User[] = [
 function TableDemo() {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1");
+  const search = searchParams.get("search") || "";
   const [isModalOpen, setModalOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Record<string, any[]>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, [page, search, activeFilters]);
 
   const columns: ColumnDef<User>[] = [
     { header: "Name", accessorKey: "name" },
@@ -103,6 +112,24 @@ function TableDemo() {
     </div>
   );
 
+  const filteredData = MOCK_DATA.filter((user) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(search.toLowerCase()) ||
+      user.email.toLowerCase().includes(search.toLowerCase()) ||
+      user.department.toLowerCase().includes(search.toLowerCase());
+
+    const matchesFilters = Object.entries(activeFilters).every(([field, values]) => {
+      if (!values || values.length === 0) return true;
+      const col = columns.find((c) => c.header === field);
+      const accessor = col?.accessorKey;
+      if (!accessor) return true;
+      const userValue = String((user as any)[accessor] || "");
+      return values.includes(userValue);
+    });
+
+    return matchesSearch && matchesFilters;
+  });
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -113,28 +140,33 @@ function TableDemo() {
 
         <div className="bg-card rounded-xl border p-6 shadow-lg">
           <DataTableLayout
-            data={MOCK_DATA}
+            data={filteredData}
             columns={columns}
-            keyExtractor={(row) => row.id}
-            totalPages={1}
-            currentPage={page}
-            themeColor="#6366f1" // Custom indigo color
-            actionNode={headerActions}
-            onRowClick={(row: User) => console.log("Row Clicked:", row)}
-            gridComponent={(data: User[]) => (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data.map(user => (
-                  <div key={user.id} className="p-4 border rounded-lg bg-card shadow-sm hover:border-primary transition-colors">
-                    <h3 className="font-bold text-lg">{user.name}</h3>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
-                    <div className="mt-4 flex justify-between items-center border-t pt-2">
-                      <Badge variant="outline">{user.role}</Badge>
-                      <span className="text-xs text-muted-foreground">{user.department}</span>
+            extraTools={{
+              keyExtractor: (row) => row.id,
+              totalPages: 1,
+              currentPage: page,
+              themeColor: "#6366f1", // Custom indigo color
+              actionNode: headerActions,
+              onRowClick: (row: User) => console.log("Row Clicked:", row),
+              isLoading,
+              onFilterChange: (filters) => setActiveFilters(filters),
+              unfilteredData: MOCK_DATA,
+              gridComponent: (data: User[]) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {data.map(user => (
+                    <div key={user.id} className="p-4 border rounded-lg bg-card shadow-sm hover:border-primary transition-colors">
+                      <h3 className="font-bold text-lg">{user.name}</h3>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                      <div className="mt-4 flex justify-between items-center border-t pt-2">
+                        <Badge variant="outline">{user.role}</Badge>
+                        <span className="text-xs text-muted-foreground">{user.department}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )
+            }}
           />
         </div>
 

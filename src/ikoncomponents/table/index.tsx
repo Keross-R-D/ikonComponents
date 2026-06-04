@@ -35,6 +35,7 @@ export function DataTableLayout<T>({
     onLoadMore,
     hasMore,
     onFilterChange,
+    unfilteredData,
   } = extraTools ?? {};
 
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
@@ -76,20 +77,19 @@ export function DataTableLayout<T>({
   };
 
   const handleToggleFilterValue = (column: string, value: string) => {
-    setTableFilters(prev => {
-      const currentValues = prev[column] || [];
-      const nextValues = currentValues.includes(value)
-        ? currentValues.filter(v => v !== value)
-        : [...currentValues, value];
+    const currentValues = tableFilters[column] || [];
+    const nextValues = currentValues.includes(value)
+      ? currentValues.filter(v => v !== value)
+      : [...currentValues, value];
 
-      const next = { ...prev };
-      if (nextValues.length === 0) {
-        delete next[column];
-      } else {
-        next[column] = nextValues;
-      }
-      return next;
-    });
+    const nextFilters = { ...tableFilters };
+    if (nextValues.length === 0) {
+      delete nextFilters[column];
+    } else {
+      nextFilters[column] = nextValues;
+    }
+    setTableFilters(nextFilters);
+    onFilterChange?.(nextFilters);
   };
 
   const removeActiveFilterColumn = (column: string) => {
@@ -111,7 +111,8 @@ export function DataTableLayout<T>({
   const getUniqueValuesForColumn = (header: string) => {
     const col = columns.find(c => c.header === header);
     if (!col || !col.accessorKey) return [];
-    const values = data.map(row => String((row as any)[col.accessorKey] || ""));
+    const sourceData = unfilteredData || data;
+    const values = sourceData.map(row => String((row as any)[col.accessorKey] || ""));
     return Array.from(new Set(values)).filter(Boolean).sort();
   };
 
@@ -423,7 +424,12 @@ export function DataTableLayout<T>({
                         variant="ghost"
                         size="sm"
                         className="w-full text-xs"
-                        onClick={() => setTableFilters(prev => { const next = { ...prev }; delete next[colHeader]; return next; })}
+                        onClick={() => {
+                          const nextFilters = { ...tableFilters };
+                          delete nextFilters[colHeader];
+                          setTableFilters(nextFilters);
+                          onFilterChange?.(nextFilters);
+                        }}
                       >
                         Clear Selections
                       </Button>
