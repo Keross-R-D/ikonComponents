@@ -394,7 +394,7 @@ export const AssistantComponent = ({
   };
 
   return (
-    <AssistantRuntimeProvider runtime={runtime}>
+    <AssistantRuntimeProvider runtime={runtime as any}>
       <div className={className}>
         <div
           className={`flex flex-col h-full border rounded-lg overflow-hidden ${className}`}

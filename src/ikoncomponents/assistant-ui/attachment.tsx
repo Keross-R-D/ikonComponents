@@ -137,7 +137,8 @@ const AttachmentUI: FC = () => {
         ({ attachment }) => attachment.type === "image",
     );
     const typeLabel = useAssistantState(({ attachment }) => {
-        const type = attachment.type;
+        // const type = attachment.type;
+        const type = attachment.type as "image" | "document" | "file";
         switch (type) {
             case "image":
                 return "Image";

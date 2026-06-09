@@ -1,20 +1,21 @@
 export interface TabArray {
-    tabName: string;
-    tabId: string;
-    default: boolean;
-    tabContent?: React.ReactNode;
-    url?: string;
-};
+  tabName: string;
+  tabId: string;
+  default: boolean;
+  tabContent?: React.ReactNode;
+  url?: string;
+  icon?: React.ReactNode;
+}
 
 export interface TabProps {
-    children?: React.ReactNode;
-    tabArray: TabArray[];
-    tabListClass?: string;
-    tabListInnerClass?: string;
-    tabListButtonClass?: string;
-    tabContentClass?: string;
-    pathName?: string;
-    headerEndComponent?: React.ReactNode;
-    onTabChange?: (tabId: string) => void;
-    isSeperatePage?: boolean;
+  children?: React.ReactNode;
+  tabArray: TabArray[];
+  tabListClass?: string;
+  tabListInnerClass?: string;
+  tabListButtonClass?: string;
+  tabContentClass?: string;
+  pathName?: string;
+  headerEndComponent?: React.ReactNode;
+  onTabChange?: (tabId: string) => void;
+  isSeperatePage?: boolean;
 }
