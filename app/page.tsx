@@ -7,7 +7,7 @@ import { ActionMenu } from "../src/ikoncomponents/action-menu";
 import { ColumnDef } from "../src/ikoncomponents/table/type";
 import { Button } from "../src/shadcn/button";
 import { Badge } from "../src/shadcn/badge";
-import { Trash, Plus, Mail, UserCheck, Shield, Download } from "lucide-react";
+import { Trash, Plus, Mail, UserCheck, Shield, Download, Box, User, Tag, CalendarDays } from "lucide-react";
 import { CustomTabs } from "../src/ikoncomponents/tabs";
 import { ThemeToggleBtn } from "../src/ikoncomponents/theme-toggle-btn";
 import {
@@ -18,7 +18,8 @@ import {
   CardTitle,
 } from "../src/shadcn/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../src/shadcn/tabs";
-  import { ListIcon, LayoutDashboardIcon, UsersIcon } from "lucide-react";
+import { ListIcon, LayoutDashboardIcon, UsersIcon } from "lucide-react";
+import HeaderDetails from "../src/ikoncomponents/header";
 
 // --- Mock Components ---
 
@@ -214,28 +215,27 @@ function TableDemo() {
     return matchesSearch && matchesFilters;
   });
 
-const tabs = [
-  {
-    tabId: "task-list",
-    tabName: "Task List",
-    icon: <ListIcon className="size-4" />,
-    tabContent: <div>...</div>,
-    default: true,
-  },
-  {
-    tabId: "board",
-    tabName: "Board",
-    icon: <LayoutDashboardIcon className="size-4" />,
-    tabContent: <div>...</div>,
-  },
-  {
-    tabId: "resource",
-    tabName: "Resource Utilisation",
-    icon: <UsersIcon className="size-4" />,
-    tabContent: <div>...</div>,
-  },
-];
-
+  const tabs = [
+    {
+      tabId: "task-list",
+      tabName: "Task List",
+      icon: <ListIcon className="size-4" />,
+      tabContent: <div>...</div>,
+      default: true,
+    },
+    {
+      tabId: "board",
+      tabName: "Board",
+      icon: <LayoutDashboardIcon className="size-4" />,
+      tabContent: <div>...</div>,
+    },
+    {
+      tabId: "resource",
+      tabName: "Resource Utilisation",
+      icon: <UsersIcon className="size-4" />,
+      tabContent: <div>...</div>,
+    },
+  ];
 
   return (
     <div className="min-h-screen p-8">
@@ -265,6 +265,53 @@ const tabs = [
               tabName: "Deal",
               tabContent: <Button>Deal</Button>,
               default: false,
+            },
+             {
+              tabId: "3",
+              tabName: "Product",
+              tabContent: <Button>Product</Button>,
+              default: true,
+            },
+            {
+              tabId: "4",
+              tabName: "FX Rate",
+              tabContent: <Button>FX Rate</Button>,
+              default: false,
+            },
+             {
+              tabId: "5",
+              tabName: "Office Details",
+              tabContent: <Button>Office Details</Button>,
+              default: true,
+            },
+            {
+              tabId: "6",
+              tabName: "Employee Data",
+              tabContent: <Button>Employee Data</Button>,
+              default: false,
+            },
+          ]}
+        />
+
+        <HeaderDetails
+          icon={<Box className="h-7 w-7" />}
+          title="Product Details"
+          subtitle={"N/A"}
+          meta={[
+            {
+              label: "Project Manager",
+              value: "N/A",
+              icon: <User className="h-4 w-4" />,
+            },
+            {
+              label: "Product Type",
+              value: "N/A",
+              icon: <Tag className="h-4 w-4" />,
+            },
+            {
+              label: "Updated On",
+              value: "N/A",
+              icon: <CalendarDays className="h-4 w-4" />,
             },
           ]}
         />

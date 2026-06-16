@@ -60,17 +60,14 @@ export function CustomTabs({
   };
 
   const handleGroupedTabSelect = (tab: TabArray) => {
-    setVisibleTabs((prev) => {
-      const updatedTabs = [...prev];
-      const replacedTab = updatedTabs.pop();
-      if (replacedTab) {
-        setGroupedTabs((prevGrouped) => [
-          ...prevGrouped.filter((t) => t.tabId !== tab.tabId),
-          replacedTab,
-        ]);
-      }
-      return [...updatedTabs, tab];
-    });
+    const replacedTab = visibleTabs[visibleTabs.length - 1];
+    const newVisibleTabs = [...visibleTabs.slice(0, -1), tab];
+    const newGroupedTabs = [
+      ...groupedTabs.filter((t) => t.tabId !== tab.tabId),
+      ...(replacedTab ? [replacedTab] : []),
+    ];
+    setVisibleTabs(newVisibleTabs);
+    setGroupedTabs(newGroupedTabs);
     handleTabChange(tab.tabId);
   };
 
