@@ -213,7 +213,6 @@ export const MainSidebar = ({
   };
 
   return (
-    <ProviderWrapper baseUrl="" platformUrl="">
     <TooltipProvider delayDuration={0}>
       <aside className="fixed left-0 top-0 z-20 h-screen w-12 border-r border-border bg-sidebar text-sidebar-foreground flex flex-col items-center py-4 ">
         {/* Account */}
@@ -386,6 +385,5 @@ export const MainSidebar = ({
         </DropdownMenu>
       </aside>
     </TooltipProvider>
-    </ProviderWrapper>
   );
 };
