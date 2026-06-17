@@ -291,6 +291,8 @@ function TableDemo() {
               default: false,
             },
           ]}
+
+          itemsToDisplay={6}
         />
 
         <HeaderDetails

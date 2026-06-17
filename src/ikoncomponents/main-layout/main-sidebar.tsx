@@ -32,6 +32,7 @@ import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 import { Icon } from "../icon";
 import { useRefresh } from "./RefreshContext";
+import { ProviderWrapper } from "../provider-wrapper";
 
 
 export interface AccountMembership {
@@ -60,6 +61,7 @@ export interface Software {
   visible: boolean;
   defaultSoftware: boolean;
   order: number;
+  displayName: string;
 }
 
 export interface User {
@@ -211,6 +213,7 @@ export const MainSidebar = ({
   };
 
   return (
+    <ProviderWrapper baseUrl="" platformUrl="">
     <TooltipProvider delayDuration={0}>
       <aside className="fixed left-0 top-0 z-20 h-screen w-12 border-r border-border bg-sidebar text-sidebar-foreground flex flex-col items-center py-4 ">
         {/* Account */}
@@ -294,7 +297,7 @@ export const MainSidebar = ({
             );
 
             return (
-              <Tooltip key={software.softwareName}>
+              <Tooltip key={software.displayName}>
                 <TooltipTrigger asChild className="h-8 w-8">
                   <Button
                     variant="ghost"
@@ -312,13 +315,13 @@ export const MainSidebar = ({
                         <FolderCode className="h-8 w-8" />
                       )}
 
-                      <span className="sr-only">{software.softwareName}</span>
+                      <span className="sr-only">{software.displayName}</span>
                     </Link>
                   </Button>
                 </TooltipTrigger>
 
                 <TooltipContent side="right" sideOffset={5}>
-                  {software.softwareName}
+                  {software.displayName}
                 </TooltipContent>
               </Tooltip>
             );
@@ -383,5 +386,6 @@ export const MainSidebar = ({
         </DropdownMenu>
       </aside>
     </TooltipProvider>
+    </ProviderWrapper>
   );
 };
