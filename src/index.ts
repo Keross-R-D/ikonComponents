@@ -94,7 +94,7 @@ export type {
 
 
 export { DataTableLayout } from "./ikoncomponents/table";
-export type { DataTableLayoutProps , ColumnDef } from "./ikoncomponents/table/type";
+export type { DataTableLayoutProps , ExtraPrams , ColumnsProps } from "./ikoncomponents/table/type";
 
 export {Reload} from "./ikoncomponents/reload-component";
 

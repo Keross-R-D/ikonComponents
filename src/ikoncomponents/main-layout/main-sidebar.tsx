@@ -4,12 +4,19 @@ import * as React from "react";
 import {
   Check,
   CircleUserRound,
+  ExternalLink,
   FolderCode,
   Home,
+  LoaderPinwheel,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
   Settings,
 } from "lucide-react";
 import { Button } from "../../shadcn/button";
+import { cn } from "../../utils/cn";
+import { useSidebar } from "../../shadcn/sidebar";
+import { useSidebarExpandedState } from "./sidebar-expanded-context";
 import {
   Tooltip,
   TooltipContent,
@@ -100,9 +107,11 @@ export interface DecodedAccessToken {
 export const MainSidebar = ({
   baseUrl,
   platformUrl,
+  releaseOpsUrl = "https://ikon-dev.keross.com/developer/devtools",
 }: {
   baseUrl: string;
   platformUrl: string;
+  releaseOpsUrl?: string;
 }) => {
   const [user, setUser] = React.useState<User>();
   const [accounts, setAccounts] = React.useState<AccountMembership[]>([]);
@@ -111,6 +120,16 @@ export const MainSidebar = ({
   >();
   const [softwares, setSoftwares] = React.useState<Software[]>([]);
   const { refreshCounter } = useRefresh();
+  const { expanded, setExpanded } = useSidebarExpandedState();
+  const { open, setOpen } = useSidebar();
+  const [roles, setRoles] = React.useState<string[]>([]);
+
+  // Sub menu (app sidebar) drives the rail inversely: whenever the sub menu is
+  // toggled — including from the header trigger — collapse/expand the rail to
+  // the opposite state. Single trigger (`open`), so there is no feedback loop.
+  React.useEffect(() => {
+    setExpanded(!open);
+  }, [open]);
 
   const getInitials = (name: string) => {
     return name
@@ -138,7 +157,7 @@ export const MainSidebar = ({
         });
 
         const decoded = jwtDecode<DecodedAccessToken>(accessToken ?? "");
-
+        setRoles(decoded.platformAccess.roles);
         // Fetch all data in parallel
         const [userResponse, accountsResponse, softwaresResponse] =
           await Promise.all([
@@ -214,20 +233,33 @@ export const MainSidebar = ({
 
   return (
     <TooltipProvider delayDuration={0}>
-      <aside className="fixed left-0 top-0 z-20 h-screen w-12 border-r border-border bg-sidebar text-sidebar-foreground flex flex-col items-center py-4 ">
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-20 h-screen border-r border-border bg-sidebar text-sidebar-foreground flex flex-col py-4 transition-[width] duration-200 ease-in-out",
+          expanded ? "w-56 items-stretch px-2" : "w-12 items-center"
+        )}
+      >
         {/* Account */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="default"
-              className="mb-4 h-8 w-8 rounded-lg p-0"
+              className={cn(
+                "mb-4 h-8 rounded-lg",
+                expanded ? "w-full justify-start gap-3 px-2" : "w-8 p-0"
+              )}
               disabled={!selectedAccount}
             >
-              <span className="text-base font-medium text-accent-foreground">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-base font-medium text-accent-foreground">
                 {selectedAccount
                   ? getInitials(selectedAccount.accountName)
                   : "..."}
               </span>
+              {expanded && (
+                <span className="truncate text-sm font-medium">
+                  {selectedAccount?.accountName || "Account"}
+                </span>
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -274,22 +306,36 @@ export const MainSidebar = ({
         </DropdownMenu>
 
         {/* Softwares */}
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-1 w-full">
           <Tooltip key={"home"}>
             <TooltipTrigger asChild className="h-8 w-8">
-              <Button variant="ghost" size="icon" className="h-10 w-10" asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "h-10",
+                  expanded ? "w-full justify-start gap-3 px-3" : "w-10"
+                )}
+                asChild
+              >
                 <Link href={`${platformUrl}/home`}>
-                  <Home className="h-8 w-8" />
-                  <span className="sr-only">Home</span>
+                  <Home className="h-8 w-8 shrink-0" />
+                  {expanded ? (
+                    <span className="truncate text-sm">Home</span>
+                  ) : (
+                    <span className="sr-only">Home</span>
+                  )}
                 </Link>
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
-              Home
-            </TooltipContent>
+            {!expanded && (
+              <TooltipContent side="right" sideOffset={5}>
+                Home
+              </TooltipContent>
+            )}
           </Tooltip>
         </nav>
-        <nav className="flex flex-col gap-1 flex-1">
+        <nav className="flex flex-col gap-1 flex-1 w-full">
           {softwares.map((software) => {
             const hasIcon = Boolean(
               software.icon && software.icon.trim() !== ""
@@ -301,52 +347,122 @@ export const MainSidebar = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-10 w-10"
+                    className={cn(
+                      "h-10",
+                      expanded ? "w-full justify-start gap-3 px-3" : "w-10"
+                    )}
                     asChild
                   >
                     <Link href={software.url ?? "#"}>
                       {hasIcon ? (
                         <Icon
                           name={toPascalCase(software.icon ?? "")}
-                          className="h-8 w-8"
+                          className="h-8 w-8 shrink-0"
                         />
                       ) : (
-                        <FolderCode className="h-8 w-8" />
+                        <FolderCode className="h-8 w-8 shrink-0" />
                       )}
 
-                      <span className="sr-only">{software.displayName}</span>
+                      {expanded ? (
+                        <span className="truncate text-sm">
+                          {software.displayName}
+                        </span>
+                      ) : (
+                        <span className="sr-only">{software.displayName}</span>
+                      )}
                     </Link>
                   </Button>
                 </TooltipTrigger>
 
-                <TooltipContent side="right" sideOffset={5}>
-                  {software.displayName}
-                </TooltipContent>
+                {!expanded && (
+                  <TooltipContent side="right" sideOffset={5}>
+                    {software.displayName}
+                  </TooltipContent>
+                )}
               </Tooltip>
             );
           })}
         </nav>
-
+        {(roles?.includes("ADMIN") || roles?.includes("DEVELOPER") || roles?.includes("SUPERADMIN")) && (
+              <>
+                {/* Release Ops */}
+                <Tooltip key="release-ops">
+                  <TooltipTrigger asChild className="h-8 w-8">
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        "h-10",
+                        expanded ? "w-full justify-start gap-3 px-3" : "w-10"
+                      )}
+                      asChild
+                    >
+                      <a
+                        href={releaseOpsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <LoaderPinwheel className="h-8 w-8 shrink-0" />
+                        {expanded ? (
+                          <span className="truncate text-sm">Release Ops.</span>
+                        ) : (
+                          <span className="sr-only">Release Ops.</span>
+                        )}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  {!expanded && (
+                    <TooltipContent side="right" sideOffset={5}>
+                     Release Ops.
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </>
+        )}
         {/* Settings */}
         <Tooltip key="settings">
           <TooltipTrigger asChild className="h-8 w-8">
-            <Button variant="ghost" className="h-10 w-10" asChild>
+            <Button
+              variant="ghost"
+              className={cn(
+                "h-10",
+                expanded ? "w-full justify-start gap-3 px-3" : "w-10"
+              )}
+              asChild
+            >
               <Link href={`${platformUrl}/settings`}>
-                <Settings className="h-8 w-8" />
-                <span className="sr-only">Settings</span>
+                <Settings className="h-8 w-8 shrink-0" />
+                {expanded ? (
+                  <span className="truncate text-sm">Settings</span>
+                ) : (
+                  <span className="sr-only">Settings</span>
+                )}
               </Link>
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="right" sideOffset={5}>
-            Settings
-          </TooltipContent>
+          {!expanded && (
+            <TooltipContent side="right" sideOffset={5}>
+              Settings
+            </TooltipContent>
+          )}
         </Tooltip>
 
         {/* User Avatar */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-10 w-10">
-              <CircleUserRound className="h-8 w-8" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "h-10",
+                expanded ? "w-full justify-start gap-3 px-3" : "w-10"
+              )}
+            >
+              <CircleUserRound className="h-8 w-8 shrink-0" />
+              {expanded && (
+                <span className="truncate text-sm font-medium">
+                  {user?.userName || "Profile"}
+                </span>
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -383,6 +499,49 @@ export const MainSidebar = ({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* Collapse / expand toggle */}
+        <div
+          className={cn(
+            "mb-2 flex",
+            expanded ? "justify-end" : "justify-center"
+          )}
+        >
+          <Tooltip key="toggle-sidebar">
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size={expanded ? "default" : "icon"}
+                className={cn(
+                  "h-8",
+                  expanded ? "w-full justify-start gap-3 px-3" : "w-8"
+                )}
+                onClick={() => {
+                  const next = !expanded;
+                  setExpanded(next);
+                  // Opening the rail closes the sub menu, and vice versa.
+                  setOpen(!next);
+                }}
+              >
+                {expanded ? (
+                  <PanelLeftClose className="h-5 w-5 shrink-0" />
+                ) : (
+                  <PanelLeftOpen className="h-5 w-5 shrink-0" />
+                )}
+                {expanded ? (
+                  <span className="truncate text-sm">Collapse</span>
+                ) : (
+                  <span className="sr-only">Expand sidebar</span>
+                )}
+              </Button>
+            </TooltipTrigger>
+            {!expanded && (
+              <TooltipContent side="right" sideOffset={5}>
+                Expand sidebar
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </div>
       </aside>
     </TooltipProvider>
   );

@@ -10,9 +10,13 @@ export function DataTablePageSize() {
   const currentSize = searchParams.get("size") || "10";
 
   const handleSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    // Create a new URLSearchParams instance from the current ones
     const params = new URLSearchParams(searchParams.toString());
+
     params.set("size", e.target.value);
     params.set("page", "1");
+
+    // Next.js navigation
     router.push(`${pathname}?${params.toString()}`);
   };
 

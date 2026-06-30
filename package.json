@@ -1,6 +1,6 @@
 {
   "name": "ikoncomponents",
-  "version": "1.7.3",
+  "version": "1.8.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "css": "dist/styles.css",
@@ -78,6 +78,7 @@
     "use-debounce": "^10.1.1",
     "uuid": "^13.0.0",
     "vaul": "^1.1.2",
+    "xlsx": "^0.18.5",
     "zod": "^4.3.6",
     "zustand": "^5.0.10",
     "zxcvbn": "^4.4.2"
