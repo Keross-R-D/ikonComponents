@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {
+  Bot,
   Check,
   CircleUserRound,
   ExternalLink,
@@ -9,9 +10,11 @@ import {
   Home,
   LoaderPinwheel,
   LogOut,
+  Palette,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  Wrench,
 } from "lucide-react";
 import { Button } from "../../shadcn/button";
 import { cn } from "../../utils/cn";
@@ -107,11 +110,14 @@ export interface DecodedAccessToken {
 export const MainSidebar = ({
   baseUrl,
   platformUrl,
-  releaseOpsUrl = "https://ikon-dev.keross.com/developer/devtools",
+  releaseOpsUrl = "https://ikon-dev.keross.com/",
+  // baseUrl = "https://api.nexicron.com",
 }: {
   baseUrl: string;
   platformUrl: string;
   releaseOpsUrl?: string;
+  /** Base URL for the Nexicron product links (DevTools, Studio, AI Workforce). */
+  // baseUrl?: string;
 }) => {
   const [user, setUser] = React.useState<User>();
   const [accounts, setAccounts] = React.useState<AccountMembership[]>([]);
@@ -385,7 +391,7 @@ export const MainSidebar = ({
         </nav>
         {(roles?.includes("ADMIN") || roles?.includes("DEVELOPER") || roles?.includes("SUPERADMIN")) && (
               <>
-                {/* Release Ops */}
+                {/* Release Ops 
                 <Tooltip key="release-ops">
                   <TooltipTrigger asChild className="h-8 w-8">
                     <Button
@@ -415,7 +421,41 @@ export const MainSidebar = ({
                      Release Ops.
                     </TooltipContent>
                   )}
-                </Tooltip>
+                </Tooltip>*/}
+
+                {/* Nexicron product links (base URL is provided dynamically) */}
+                {[
+                  { key: "Release Ops", label: "Release Ops", href: `${releaseOpsUrl}/devtools/`, icon: LoaderPinwheel },
+                  { key: "IKON Studio", label: "IKON Studio", href: `${releaseOpsUrl}/ikon-studio`, icon: Palette },
+                  { key: "IKON AI Workforce", label: "IKON AI Workforce", href: `${releaseOpsUrl}/ikon-ai-workforce`, icon: Bot },
+                ].map(({ key, label, href, icon: LinkIcon }) => (
+                  <Tooltip key={key}>
+                    <TooltipTrigger asChild className="h-8 w-8">
+                      <Button
+                        variant="ghost"
+                        className={cn(
+                          "h-10",
+                          expanded ? "w-full justify-start gap-3 px-3" : "w-10"
+                        )}
+                        asChild
+                      >
+                        <a href={href} target="_blank" rel="noopener noreferrer">
+                          <LinkIcon className="h-8 w-8 shrink-0" />
+                          {expanded ? (
+                            <span className="truncate text-sm">{label}</span>
+                          ) : (
+                            <span className="sr-only">{label}</span>
+                          )}
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    {!expanded && (
+                      <TooltipContent side="right" sideOffset={5}>
+                        {label}
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                ))}
               </>
         )}
         {/* Settings */}
